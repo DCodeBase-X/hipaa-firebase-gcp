@@ -40,13 +40,28 @@ flowchart TD
         GCS["Cloud Storage\nEncrypted Documents"]
     end
 
-    Internet --> CF --> WP
-    WP -- "No PHI" --> FA
-    FA --> FF
-    FF --> FS
-    FF -- "Authenticated only" --> SQL
-    FF -- "Authenticated only" --> GCS
-    SF -- "BAA required" --> FF
+    Internet e1@--> CF e2@--> WP
+    WP e3@-- "No PHI" e4@--> FA
+    FA e5@--> FF
+    FF e6@--> FS
+    FF e7@-- "Authenticated only" e8@--> SQL
+    FF e9@-- "Authenticated only" e10@--> GCS
+    SF e11@-- "BAA required" e12@--> FF
+
+    classDef animate stroke-dasharray: 9,5,stroke-dashoffset: 900,animation: dash 25s linear infinite;
+    class e1 animate
+    class e2 animate
+    class e3 animate
+    class e4 animate
+    class e5 animate
+    class e6 animate
+    class e7 animate
+    class e8 animate
+    class e9 animate
+    class e10 animate
+    class e11 animate
+    class e12 animate
+    
 
     style L1 fill:#f0f9ff,stroke:#0ea5e9
     style L2 fill:#fefce8,stroke:#eab308

@@ -126,7 +126,7 @@ If you're building from scratch, read in this order:
 
 ## About
 
-Built from a real implementation — a HIPAA-compliant 3-layer cloud infrastructure for a faith-based 501(c)(3) nonprofit handling PHI across 10 integrated service programs, designed to support 100–150 residents.
+Built from a real implementation. This is a complete overview of the HIPAA-compliant 3-layer cloud infrastructure for a faith-based 501(c)(3) nonprofit handling PHI across 10 integrated service programs, designed to support 100–150 residents.
 
 **Damarius McNair** — Product Manager & Technology Strategist
 

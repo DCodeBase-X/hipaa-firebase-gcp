@@ -40,7 +40,8 @@ flowchart TD
         GCS["Cloud Storage\nEncrypted Documents"]
     end
 
-    Internet e1@--> CF e2@--> WP
+    Internet e1@--> L1
+    CF e2@--> WP
     WP e3@-- "No PHI" e4@--> FA
     FA e5@--> FF
     FF e6@--> FS

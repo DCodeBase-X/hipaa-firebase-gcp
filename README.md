@@ -1,4 +1,4 @@
-# HIPAA-Compliant Architecture for Nonprofits on Firebase & GCP
+# HIPPA-Compliant Architecture for Nonprofits on Firebase & GCP
 
 A practical reference for building HIPAA-compliant systems on Firebase and Google Cloud Platform — written for nonprofits, solo consultants, and small technical teams who can't afford a dedicated security architect.
 

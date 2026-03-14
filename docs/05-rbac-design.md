@@ -2,7 +2,7 @@
 
 HIPAA's minimum necessary standard requires that every person accessing PHI can only see what they need to do their job — nothing more. RBAC (Role-Based Access Control) is how you enforce this technically across Firebase Auth, Firestore Security Rules, and Cloud Functions.
 
----
+ 
 
 ## Role Definitions
 
@@ -31,12 +31,12 @@ flowchart TD
     ADM -->|"Can manage"| VOL
 ```
 
----
+ 
 
 ## Role-to-Data Access Matrix
 
 | Data Type | admin | clinical_staff | program_staff | volunteer | client |
-|---|:---:|:---:|:---:|:---:|:---:|
+| |: :|: :|: :|: :|: :|
 | Client PHI (health, assessments) | ✅ All | ✅ Assigned only | ❌ | ❌ | ✅ Own only |
 | Client demographics | ✅ All | ✅ Assigned only | ✅ Limited | ❌ | ✅ Own only |
 | Program enrollment status | ✅ | ✅ | ✅ | ❌ | ✅ Own only |
@@ -47,7 +47,7 @@ flowchart TD
 | Audit logs | ✅ | ❌ | ❌ | ❌ | ❌ |
 | System config | ✅ | ❌ | ❌ | ❌ | ❌ |
 
----
+ 
 
 ## Implementation: Firebase Auth Custom Claims
 
@@ -106,7 +106,7 @@ async function getUserRole() {
 }
 ```
 
----
+ 
 
 ## Implementation: Firestore Security Rules
 
@@ -185,7 +185,7 @@ service cloud.firestore {
 }
 ```
 
----
+ 
 
 ## Implementation: Cloud Function Access Control
 
@@ -237,7 +237,7 @@ exports.getClientRecord = functions.https.onCall(async (data, context) => {
 });
 ```
 
----
+ 
 
 ## MFA Enforcement by Role
 
@@ -257,6 +257,6 @@ export async function enforceRoleMfa(user, role) {
 }
 ```
 
----
+ 
 
 **Next:** [Data Classification →](06-data-classification.md)

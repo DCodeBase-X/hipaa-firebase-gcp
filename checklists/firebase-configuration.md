@@ -2,7 +2,7 @@
 
 Every Firebase setting that must be verified before handling PHI. Work through this top to bottom — each item maps to a specific HIPAA technical safeguard requirement.
 
----
+  
 
 ## Prerequisites
 
@@ -11,7 +11,7 @@ Every Firebase setting that must be verified before handling PHI. Work through t
 - [ ] A named Security Officer is designated for your organization
 - [ ] A written Risk Analysis document exists (even a simple one)
 
----
+  
 
 ## Firebase Authentication
 
@@ -25,7 +25,7 @@ Every Firebase setting that must be verified before handling PHI. Work through t
 - [ ] No PHI fields exist in Firebase user profiles (`displayName`, `photoURL`, custom claims)
 - [ ] **Anonymous auth** is disabled unless there is a specific, documented use case
 
----
+  
 
 ## Cloud Firestore
 
@@ -38,7 +38,7 @@ Every Firebase setting that must be verified before handling PHI. Work through t
 - [ ] **Security rules are tested** — use the Firebase Rules Playground to verify deny/allow cases
 - [ ] Production rules do **not** have any `allow read, write: if true` statements
 
----
+  
 
 ## Cloud Functions
 
@@ -52,7 +52,7 @@ Every Firebase setting that must be verified before handling PHI. Work through t
 - [ ] **CORS configuration** restricts which origins can call HTTPS callable functions
 - [ ] Functions have **appropriate timeout limits** set (don't leave long-running processes with PHI in memory)
 
----
+  
 
 ## Cloud SQL
 
@@ -67,7 +67,7 @@ Every Firebase setting that must be verified before handling PHI. Work through t
 - [ ] Database users follow **least privilege** — application service accounts cannot drop tables or modify schema
 - [ ] A separate read-only database user exists for reporting/analytics queries
 
----
+  
 
 ## Cloud Storage
 
@@ -79,7 +79,7 @@ Every Firebase setting that must be verified before handling PHI. Work through t
 - [ ] PHI documents are **not served via Firebase Hosting** (Hosting is not BAA-covered)
 - [ ] Signed URLs for PHI document access have **short expiration times** (minutes, not hours/days)
 
----
+  
 
 ## Services to Disable or Verify Are Unused
 
@@ -89,7 +89,7 @@ Every Firebase setting that must be verified before handling PHI. Work through t
 - [ ] **Firebase Remote Config** — reviewed to confirm no PHI values in config parameters
 - [ ] **Firebase Hosting** — confirmed it serves only public content with no PHI
 
----
+  
 
 ## Monitoring and Alerting
 
@@ -98,12 +98,12 @@ Every Firebase setting that must be verified before handling PHI. Work through t
 - [ ] **Error Reporting** is reviewed periodically — errors may surface misconfigured security rules
 - [ ] A process exists to review Cloud Audit Logs for PHI access anomalies at least monthly
 
----
+  
 
 **Sign-off:** Before go-live, this checklist should be reviewed and signed by the designated Security Officer.
 
 | Item | Reviewer | Date | Notes |
-|---|---|---|---|
+|---|---|---|--- |
 | Firebase Auth configuration | | | |
 | Firestore rules and audit logging | | | |
 | Cloud Functions PHI access controls | | | |
@@ -111,6 +111,6 @@ Every Firebase setting that must be verified before handling PHI. Work through t
 | Storage bucket configuration | | | |
 | Disabled/verified uncovered services | | | |
 
----
+  
 
 **Next:** [GCP Configuration →](gcp-configuration.md) | [Pre-Launch Audit →](pre-launch-audit.md)

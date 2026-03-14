@@ -2,7 +2,7 @@
 
 The core pattern for HIPAA-compliant systems on Firebase/GCP is a strict three-layer model. Each layer has a defined compliance scope, and the rule is enforced at the network and application level — not just policy.
 
----
+ 
 
 ## The Model
 
@@ -46,7 +46,7 @@ flowchart TD
     style L3 fill:#fef2f2,stroke:#dc2626,color:#7f1d1d
 ```
 
----
+ 
 
 ## Layer 1 — Public Layer
 
@@ -65,7 +65,7 @@ flowchart TD
 
 **Why this layer exists:** Most nonprofits need a public website. Keeping it completely separate from the operational system means a WordPress vulnerability (which are extremely common) cannot expose PHI.
 
----
+ 
 
 ## Layer 2 — Operational Layer
 
@@ -86,7 +86,7 @@ flowchart TD
 **Why Cloud Functions as the gateway:**
 Direct Firestore client SDK access is fine for non-PHI data, but PHI in Cloud SQL should never be reachable from a client app. Cloud Functions sit in the middle, validate identity and permissions server-side, and return only the minimum necessary data. This also means your security logic lives in one place rather than scattered across client apps.
 
----
+ 
 
 ## Layer 3 — Secure Data Layer
 
@@ -104,7 +104,7 @@ Direct Firestore client SDK access is fine for non-PHI data, but PHI in Cloud SQ
 - Cloud Storage buckets: uniform access, no public objects, versioning enabled, lifecycle policies for retention
 - Audit logging enabled for all read/write operations
 
----
+ 
 
 ## Data Flow: Client Intake (Example)
 
@@ -142,14 +142,14 @@ sequenceDiagram
 
 PHI enters Cloud SQL. A non-PHI event record goes to Firestore. The audit log records the operation. The staff member's app never holds PHI beyond the form session.
 
----
+ 
 
 ## Scaling This Architecture
 
 This model scales from a 10-person nonprofit to a 500-person organization without architectural changes:
 
 | Scale | Adjustment |
-|---|---|
+| | |
 | **Early stage (10 staff)** | Firebase Spark → Blaze, single Cloud SQL instance (db-f1-micro ~$10/mo) |
 | **Growing (50 staff)** | Upgrade Cloud SQL tier, add read replicas, add Cloud CDN for static assets |
 | **Established (200+ staff)** | Cloud SQL High Availability, multi-region Firestore, dedicated VPC, Cloud Armor |
@@ -157,6 +157,6 @@ This model scales from a 10-person nonprofit to a 500-person organization withou
 
 The compliance requirements don't change with scale — the infrastructure to meet them gets more robust.
 
----
+ 
 
 **Next:** [Firebase HIPAA Guide →](03-firebase-hipaa-guide.md)

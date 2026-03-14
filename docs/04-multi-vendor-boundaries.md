@@ -4,7 +4,7 @@ Real nonprofit systems don't run on a single platform. A typical stack spans a p
 
 This page maps the boundaries for a Firebase/GCP nonprofit stack.
 
----
+ 
 
 ## The Boundary Map
 
@@ -49,7 +49,7 @@ flowchart LR
     style ThirdParty fill:#fffbeb,stroke:#f59e0b
 ```
 
----
+ 
 
 ## Vendor-by-Vendor Breakdown
 
@@ -61,7 +61,7 @@ flowchart LR
 
 **PHI allowed:** Yes, in covered services, after signing the BAA.
 
----
+ 
 
 ### Cloudflare ⚠️
 **BAA status:** Available on Business and Enterprise plans only. Not available on Free or Pro.
@@ -78,7 +78,7 @@ flowchart LR
 - Configure WAF to block common injection patterns
 - Disable caching for any authenticated routes
 
----
+ 
 
 ### Hostinger ❌
 **BAA status:** Not available.
@@ -92,7 +92,7 @@ Hostinger hosts your public-facing WordPress site. The architectural rule is sim
 - Donation pages (payment handled by Stripe/Donorbox)
 - Blog, news, organizational information
 
----
+ 
 
 ### Salesforce NPSP ⚠️
 **BAA status:** Tier-dependent. Salesforce will sign a BAA for certain editions.
@@ -112,7 +112,7 @@ flowchart LR
     FF -- "PHI: clinical notes,\nhealth history,\nassessments" --> SQL
 ```
 
----
+ 
 
 ### Stripe & Donorbox ❌
 **BAA status:** Stripe does not sign BAAs. Donorbox does not sign BAAs.
@@ -122,7 +122,7 @@ flowchart LR
 
 **Architecture rule:** Payment processing lives in its own data silo. Stripe webhooks fire into Cloud Functions, which update payment records in a non-PHI Firestore collection. Client records in Cloud SQL are never passed to Stripe.
 
----
+ 
 
 ### Email Providers ⚠️
 **BAA status:** Depends on provider.
@@ -133,7 +133,7 @@ flowchart LR
 
 **The practical rule:** Do not send PHI in email body text. Ever. Use a secure message notification ("You have a new secure message — log in to view it") that directs the user to your authenticated portal. This sidesteps the email BAA question for most communication.
 
----
+ 
 
 ## The Boundary Checklist
 
@@ -150,6 +150,6 @@ Before go-live, answer yes to every item:
 - [ ] Salesforce usage is limited to non-PHI data OR Salesforce BAA is signed for your edition
 - [ ] PHI emails route to authenticated portal, not email body
 
----
+ 
 
 **Next:** [RBAC Design →](05-rbac-design.md)

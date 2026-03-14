@@ -7,7 +7,7 @@
 
 This case study walks through the end-to-end architectural decisions made for a real nonprofit implementation — from the initial technology assessment through final system design. Organization and individual details have been generalized.
 
----
+  
 
 ## The Starting Point
 
@@ -20,7 +20,7 @@ The complicating factors:
 - Total technology budget for year one: under $75,000 including all infrastructure, licensing, and professional services
 - Timeline: documentation and architecture ready for funder presentation within 90 days
 
----
+  
 
 ## Technology Assessment
 
@@ -47,7 +47,7 @@ The first step was a requirements analysis across all 10 program areas. Key find
 - Client self-service portal required for certain programs
 - Volunteer portal needed (no PHI access)
 
----
+  
 
 ## Architecture Decision: Why Three Layers
 
@@ -64,7 +64,7 @@ Rejected. Firebase Realtime Database is not BAA-covered. Firestore is, but using
 - Layer 2 (Firebase/Salesforce): Firebase Auth for RBAC is excellent. Salesforce NPSP is free for nonprofits and handles donor/volunteer/program data well.
 - Layer 3 (Cloud SQL + Cloud Storage): Right tool for structured PHI — relational, auditable, CMEK-capable, BAA-covered.
 
----
+  
 
 ## The 10-System Architecture
 
@@ -119,7 +119,7 @@ flowchart LR
 - Document Management — policy documents, templates, non-PHI files
 - Admin Dashboard — aggregate metrics, no individual PHI
 
----
+  
 
 ## Cloud SQL Schema Design
 
@@ -137,14 +137,14 @@ documents            (client_id, document_type, storage_path, uploaded_by, uploa
 
 `health_records` uses an entity-attribute-value (EAV) pattern — `field_name` and `field_value` — so new PHI fields can be added without schema migrations. This also makes it straightforward to query only the fields a specific staff role is authorized to see.
 
----
+  
 
 ## RBAC Implementation
 
 Five roles were defined based on the program staff structure:
 
 | Role | PHI Access | Firestore Access | Salesforce |
-|---|---|---|---|
+|  |  |  |  |
 | `admin` | All records | All collections | Full |
 | `clinical_staff` | Assigned clients only | Assigned program data | None |
 | `program_staff` | None | Program-relevant data | Limited |
@@ -153,7 +153,7 @@ Five roles were defined based on the program staff structure:
 
 Clinical staff are assigned client lists stored in their Firebase Auth custom claims. Every Cloud Function that touches PHI validates this assignment before executing.
 
----
+  
 
 ## Payment Integration Architecture
 
@@ -182,14 +182,14 @@ flowchart LR
 
 The critical design decision: Stripe receives `clientId` (a UUID) and payment amount — never the client's name, health status, or any PHI. The link between a payment and a client record lives only in Cloud SQL, accessible only through authenticated Cloud Functions.
 
----
+  
 
 ## Infrastructure Cost (Year 1)
 
 Based on the architecture above, annual infrastructure costs:
 
 | Item | Annual Cost |
-|---|---|
+|  |  |
 | Firebase/GCP (Blaze plan, estimated usage) | $1,200–$2,400 |
 | Google for Nonprofits credit (offset) | −$20,000 (applied) |
 | Salesforce NPSP (Power of Us grant) | $0 |
@@ -201,7 +201,7 @@ Based on the architecture above, annual infrastructure costs:
 
 The Google for Nonprofits credits covered all GCP/Firebase costs for year one and most of year two at projected usage. The effective out-of-pocket cost for the cloud infrastructure was near zero.
 
----
+  
 
 ## Documentation Deliverables
 
@@ -218,7 +218,7 @@ The architecture work produced the following documentation, which was included i
 
 This documentation package was specifically cited as a differentiator in funder conversations — it demonstrated operational readiness and governance maturity that most early-stage nonprofits cannot show.
 
----
+  
 
 ## Lessons Learned
 
@@ -236,7 +236,7 @@ This documentation package was specifically cited as a differentiator in funder 
 **The hardest part:**
 Not the technology — the organizational change management. Getting staff comfortable with role-based access controls when they're used to spreadsheets requires clear communication about why it matters. The "why HIPAA" conversation needs to happen before the system is built, not when they first hit a permission denied error.
 
----
+  
 
 *This case study is based on a real implementation. Organization details are generalized for privacy.*
 

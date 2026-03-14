@@ -2,7 +2,7 @@
 
 Google Cloud Platform settings beyond Firebase — IAM, networking, audit logging, and project-level controls.
 
----
+  
 
 ## Project & Organization Settings
 
@@ -12,7 +12,7 @@ Google Cloud Platform settings beyond Firebase — IAM, networking, audit loggin
 - [ ] **Billing alerts** are configured at 50%, 90%, and 100% of monthly budget
 - [ ] Project **labels** include `environment`, `hipaa-scope: true`, `owner`
 
----
+  
 
 ## Identity and Access Management (IAM)
 
@@ -26,7 +26,7 @@ Google Cloud Platform settings beyond Firebase — IAM, networking, audit loggin
 - [ ] Unused service accounts are disabled or deleted
 - [ ] Service account keys are **not stored in code repositories** — use Workload Identity Federation or Secret Manager
 
----
+  
 
 ## VPC and Networking
 
@@ -37,7 +37,7 @@ Google Cloud Platform settings beyond Firebase — IAM, networking, audit loggin
 - [ ] **Firewall rules** are reviewed — no rules allow ingress from `0.0.0.0/0` on database ports
 - [ ] **VPC Flow Logs** are enabled for audit visibility into network traffic
 
----
+  
 
 ## Cloud Audit Logs
 
@@ -64,7 +64,7 @@ Log filter:
   logName="projects/{project-id}/logs/cloudaudit.googleapis.com%2Fdata_access"
 ```
 
----
+  
 
 ## Secret Manager
 
@@ -74,7 +74,7 @@ Log filter:
 - [ ] Access to Secret Manager is restricted to necessary service accounts only
 - [ ] Secret versions are **disabled (not deleted)** when rotated, to preserve audit trail
 
----
+  
 
 ## Cloud SQL Checklist (GCP Level)
 
@@ -94,7 +94,7 @@ Log filter:
 - [ ] **High Availability** is evaluated — enable if uptime SLA matters (doubles cost)
 - [ ] Database schema has a dedicated `phi` schema or database — makes access auditing cleaner
 
----
+  
 
 ## Cloud Storage (GCP Level)
 
@@ -104,7 +104,7 @@ Log filter:
 - [ ] Bucket-level audit logging is verified in the Audit Logs section
 - [ ] **CORS configuration** is set to restrict which domains can access storage objects
 
----
+  
 
 ## Security Command Center
 
@@ -113,12 +113,12 @@ Log filter:
 - [ ] **Web Security Scanner** is run against any public-facing endpoints
 - [ ] Critical and High findings are remediated before go-live
 
----
+  
 
 **Sign-off:**
 
 | Area | Reviewer | Date | Status |
-|---|---|---|---|
+|  |  |  |  |
 | Project & org settings | | | |
 | IAM configuration | | | |
 | VPC and networking | | | |
@@ -127,6 +127,6 @@ Log filter:
 | Cloud SQL (GCP level) | | | |
 | Security Command Center | | | |
 
----
+  
 
 **Next:** [Pre-Launch Audit →](pre-launch-audit.md)

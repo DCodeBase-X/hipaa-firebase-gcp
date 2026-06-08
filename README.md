@@ -1,5 +1,7 @@
 # HIPAA-Compliant Architecture for Nonprofits on Firebase & GCP
 
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+
 A practical reference for building HIPAA-compliant systems on Firebase and Google Cloud Platform — written for nonprofits, solo consultants, and small technical teams who can't afford a dedicated security architect.
 
 **The gap this fills:** AWS and GCP publish HIPAA compliance docs for enterprise teams. They assume you have a solutions architect, a legal team, and a six-figure cloud budget. They don't cover what it actually looks like to build a compliant system on Firebase when your organization has 12 staff, a $60K tech budget, and a mix of Hostinger, Firebase, Cloudflare, and Salesforce in play.
@@ -73,7 +75,7 @@ flowchart TD
 ## What's in This Repo
 
 | Document | What It Covers |
-| | |
+|---|---|
 | [HIPAA Fundamentals](docs/01-hipaa-fundamentals.md) | What HIPAA actually requires technically — no fluff |
 | [Three-Layer Architecture](docs/02-three-layer-architecture.md) | Full architecture breakdown with diagrams |
 | [Firebase HIPAA Guide](docs/03-firebase-hipaa-guide.md) | What's covered under the BAA, what isn't, and the critical gotchas |
@@ -86,21 +88,26 @@ flowchart TD
 | [Physical Safeguards](docs/10-physical-safeguards.md) | Workstation policy, device encryption, MDM, and media disposal |
 | [Administrative Policies](docs/11-administrative-policies.md) | Sanction policy, workforce security, contingency plan, BAA management |
 | [Staff Training Program](docs/12-staff-training-program.md) | HIPAA training curriculum, role-specific modules, and attestation tracking |
+| [Environment Separation](docs/13-environment-separation.md) | Dev/staging/prod project isolation, synthetic data requirements, CI/CD gates |
+| [Change Control Policy](docs/14-change-control-policy.md) | What changes require Security Officer review, risk register evaluation, and change log format |
 
 | Checklist | What It Covers |
-| | |
+|---|---|
 | [Firebase Configuration](checklists/firebase-configuration.md) | Every Firebase security setting to verify |
 | [GCP Configuration](checklists/gcp-configuration.md) | Cloud SQL, IAM, audit logging, VPC setup |
 | [Pre-Launch HIPAA Audit](checklists/pre-launch-audit.md) | The full checklist before go-live |
 | [Incident Response Runbook](checklists/incident-response-runbook.md) | Step-by-step operational response for security incidents and breaches |
+| [Disaster Recovery Runbook](checklists/disaster-recovery-runbook.md) | Executable recovery procedures for 6 scenarios: Cloud SQL HA failover, PITR, full backup restore, Firestore recovery, Firebase Auth outage, Cloud Storage recovery |
 
 | Template | What It Covers |
-| | |
+|---|---|
 | [Breach Notification Letter](templates/breach-notification-letter.md) | Pre-drafted notification letters for individuals, media, and HHS |
 | [Risk Register](templates/risk-register.md) | Living risk tracking document with 7 pre-populated baseline risks |
+| [Notice of Privacy Practices](templates/notice-of-privacy-practices.md) | Required HIPAA Privacy Rule document for client distribution |
+| [Business Associate Agreement](templates/business-associate-agreement.md) | BAA template for vendor contracts, including required provisions checklist |
 
 | Case Study | What It Covers |
-| | |
+|---|---|
 | [Three-Layer Nonprofit Build](case-studies/three-layer-nonprofit-build.md) | End-to-end build walkthrough based on a real 501(c)(3) implementation |
 
  
@@ -118,7 +125,7 @@ If your app stores PHI and you're using Firebase Realtime Database — not Fires
 ## Quick Reference: BAA Status by Service
 
 | Service | BAA Covered | PHI Allowed | Notes |
-| | | | |
+| --- | --- | --- | --- |
 | **Firestore** | ✅ Yes | ✅ Yes | Must enable audit logging |
 | **Firebase Auth** | ✅ Yes | ⚠️ Limited | No clinical data in user profiles |
 | **Cloud Functions** | ✅ Yes | ✅ Yes | Don't log PHI; use VPC for SQL |
@@ -152,12 +159,22 @@ If you're building from scratch, read in this order:
 
 Built from a real implementation. This is a complete overview of the HIPAA-compliant 3-layer cloud infrastructure for a faith-based 501(c)(3) nonprofit handling PHI across 10 integrated service programs, designed to support 100–150 residents.
 
-**Damarius McNair** — Product Manager & Technology Strategist
+**Damarius McNair** — Operations, Data, and Technology Strategist
 
-- Portfolio: [dcodebase-x.github.io](https://dcodebase-x.github.io)
+- Portfolio: [damariusmcnair.com](https://damariusmcnair.com)
 - GitHub: [@DCodeBase-X](https://github.com/DCodeBase-X)
 - LinkedIn: [linkedin.com/in/damariusmcnair](https://linkedin.com/in/damariusmcnair)
 
  
 
 > **Disclaimer:** This is a technical reference guide, not legal advice. HIPAA compliance is a legal obligation — engage qualified legal counsel for your specific situation. This guide addresses technical and architectural implementation only.
+
+ 
+
+## License
+
+This work is licensed under [Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/).
+
+You are free to share and adapt this material for non-commercial purposes with attribution. Commercial use — including reselling or repackaging this content as a paid deliverable — is not permitted without written permission.
+
+© 2026 Damarius McNair

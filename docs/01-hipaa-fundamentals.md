@@ -82,7 +82,7 @@ A **Business Associate** is any vendor that handles PHI on your behalf. You need
 
 **Not required (because PHI doesn't touch these services):**
 - Hostinger (public site only — no PHI)
-- Stripe / Donorbox (payment data only — PCI, not HIPAA)
+- Stripe / Givebutter (payment data only — PCI, not HIPAA)
 - Cloudflare (if PHI is only in transit, encrypted — but get it in writing anyway)
 
 **How to sign the Google BAA:**

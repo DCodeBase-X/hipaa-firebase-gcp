@@ -121,7 +121,7 @@ Including all vendors for a complete picture:
 | Cloudflare | DNS, WAF, SSL | $0–$20 (Free or Pro) |
 | Salesforce NPSP | Nonprofit CRM | $0 (NPSP is free) or $75+ (Sales Cloud) |
 | Email (Google Workspace) | Org email | $12–$18/user |
-| Donorbox | Donation processing | $0 + 1.5–2% transaction fee |
+| Givebutter | Donation processing | $0 + 1.5–2% transaction fee |
 | **Total** | | **~$200–$350/mo + email** |
 
 ---

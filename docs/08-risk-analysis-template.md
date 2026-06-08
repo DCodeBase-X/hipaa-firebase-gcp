@@ -1,5 +1,12 @@
 # HIPAA Risk Analysis Template
 
+**Version**: 1.0  
+**Effective Date**: [MM/DD/YYYY]  
+**Review Cycle**: Annual, or after any significant system change  
+**Document Owner**: Security Officer  
+
+---
+
 > **Reference**: 45 CFR § 164.308(a)(1) — Required implementation specification under the Administrative Safeguards of the Security Rule.
 
 HIPAA does not prescribe a specific risk analysis methodology, but requires that it be accurate, thorough, and documented. This template follows NIST SP 800-30 guidance, which HHS recognizes as an acceptable framework.

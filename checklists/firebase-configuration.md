@@ -77,7 +77,7 @@ Every Firebase setting that must be verified before handling PHI. Work through t
 - [ ] **Bucket lifecycle policies** are configured for retention compliance
 - [ ] Firebase Storage security rules mirror Firestore rules — deny by default
 - [ ] PHI documents are **not served via Firebase Hosting** (Hosting is not BAA-covered)
-- [ ] Signed URLs for PHI document access have **short expiration times** (minutes, not hours/days)
+- [ ] Signed URLs for PHI document access expire in **15 minutes or less** — enforce this in code, not policy
 
   
 

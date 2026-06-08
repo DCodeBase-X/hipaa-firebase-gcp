@@ -162,7 +162,7 @@ The organization needed two revenue streams: donations and program fees. Both we
 ```mermaid
 flowchart LR
     subgraph Donation["Donation Flow"]
-        DB["Donorbox\nDonation Widget"]
+        DB["GiveButter\nDonation Widget"]
         WH1["Webhook → Cloud Function"]
         FS1["Firestore\nDonor Records (non-PHI)"]
         SF1["Salesforce\nDonor CRM"]
@@ -234,8 +234,16 @@ This documentation package was specifically cited as a differentiator in funder 
 - Document the Firestore schema formally before any data is written to it — retroactive schema documentation is painful
 
 **The hardest part:**
-Not the technology — the organizational change management. Getting staff comfortable with role-based access controls when they're used to spreadsheets requires clear communication about why it matters. The "why HIPAA" conversation needs to happen before the system is built, not when they first hit a permission denied error.
+Not the technology. The harder challenge is organizational change management. Getting staff comfortable with role-based access controls when they're used to spreadsheets requires clear communication about why it matters. The "why HIPAA" conversation needs to happen before the system is built, not when they first hit a permission denied error.
 
+
+**Questions that might surface real gaps and are worth thinking through:**
+
+1. How are you handling Firestore Security Rules vs backend-only access for your PHI layer? Direct client SDK access to PHI collections is a common audit finding
+2. Is your RBAC model reflected in custom claims on Firebase Auth tokens, or enforced at the application layer?
+3. For the Medicaid contracts specifically — are you tracking toward _42 CFR Part 2_ requirements for substance use records? That's stricter than baseline HIPAA and catches a lot of recovery programs off guard
+
+4. What does your current CI/CD pipeline look like for deploying to the PHI layer?
   
 
 *This case study is based on a real implementation. Organization details are generalized for privacy.*

@@ -146,8 +146,13 @@ Custom claims are the right place for RBAC roles. They're included in the ID tok
 ```javascript
 // Cloud Function to set role on user creation (server-side only)
 exports.setUserRole = functions.https.onCall(async (data, context) => {
-  // Verify caller is admin
-  if (!context.auth?.token?.role === 'admin') {
+  // Verify caller is authenticated, then verify admin role
+  // NOTE: Do NOT write this as: !context.auth?.token?.role === 'admin'
+  // That expression is always false due to operator precedence. It is a no-op.
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'Login required');
+  }
+  if (context.auth.token.role !== 'admin') {
     throw new functions.https.HttpsError('permission-denied', 'Admin only');
   }
 
@@ -163,13 +168,28 @@ exports.setUserRole = functions.https.onCall(async (data, context) => {
 });
 ```
 
-**Enforce MFA for staff roles.** Volunteers and lower-access roles can optionally require MFA. Admin and clinical staff should require it:
+**Enforce MFA for staff roles.** Admin and clinical staff must have MFA enforced. MFA enforcement has two distinct layers — both are required:
 
+**Server-side (authoritative) — inside every PHI-touching Cloud Function:**
 ```javascript
-// In your auth flow, check MFA enrollment for clinical roles
+// This is the security control. Client-side checks alone are bypassable.
+const user = await admin.auth().getUser(context.auth.uid);
+if (['admin', 'clinical_staff'].includes(role)) {
+  if (!user.multiFactor?.enrolledFactors?.length) {
+    throw new functions.https.HttpsError(
+      'failed-precondition',
+      'MFA enrollment required for this role'
+    );
+  }
+}
+```
+
+**Client-side (UX only) — surfaces the requirement early in the auth flow:**
+```javascript
+// This improves user experience but is not a security control.
+// A caller hitting the Cloud Function directly bypasses this entirely.
 const user = auth.currentUser;
 if (userRole === 'clinical_staff' && !user.multiFactor.enrolledFactors.length) {
-  // Redirect to MFA enrollment before allowing access
   router.push('/enroll-mfa');
 }
 ```
@@ -216,14 +236,16 @@ exports.getClientRecord = functions.https.onCall(async (data, context) => {
   }
 
   // Additional check: clinical staff can only access assigned clients
+  // Assignments are stored in staff_assignments/{staffId}_{clientId}
+  // Do NOT embed assignedClients in JWT claims — the 1000-byte limit causes silent failures
   if (role === 'clinical_staff') {
+    const assignmentId = `${context.auth.uid}_${data.clientId}`;
     const assignment = await admin.firestore()
-      .collection('assignments')
-      .where('staffId', '==', context.auth.uid)
-      .where('clientId', '==', data.clientId)
+      .collection('staff_assignments')
+      .doc(assignmentId)
       .get();
 
-    if (assignment.empty) {
+    if (!assignment.exists) {
       throw new functions.https.HttpsError('permission-denied', 'Not assigned to this client');
     }
   }

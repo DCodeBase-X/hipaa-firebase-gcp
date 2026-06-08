@@ -1,5 +1,12 @@
 # HIPAA Breach Notification Procedure
 
+**Version**: 1.0  
+**Effective Date**: [MM/DD/YYYY]  
+**Review Cycle**: Annual, or after any significant system change  
+**Document Owner**: Security Officer  
+
+---
+
 > **Reference**: 45 CFR §§ 164.400–414 — Breach Notification Rule
 > **Also see**: `checklists/incident-response-runbook.md` for the step-by-step operational response.
 

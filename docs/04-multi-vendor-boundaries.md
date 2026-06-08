@@ -27,7 +27,7 @@ flowchart LR
     subgraph ThirdParty["Third-Party — BAA Required"]
         SF["Salesforce NPSP\n⚠️ BAA tier-dependent"]
         STR["Stripe\n❌ No BAA — PCI only"]
-        DB["Donorbox\n❌ No BAA — payments only"]
+        DB["Givebutter\n❌ No BAA — payments only"]
         EMAIL["Email Provider\n⚠️ BAA required if PHI\nin message body"]
     end
 
@@ -65,11 +65,21 @@ flowchart LR
 
 ### Cloudflare ⚠️
 **BAA status:** Available on Business and Enterprise plans only. Not available on Free or Pro.
-**What Cloudflare sees:** DNS queries, HTTP headers, request metadata, and request/response content if you're not using end-to-end encryption properly.
+**What Cloudflare sees:** DNS queries, HTTP headers, request metadata, and request/response content if TLS is terminated at the Cloudflare edge without separate application-layer encryption.
 
-**The nuance:** If all PHI is encrypted at the application layer before it hits Cloudflare (i.e., Cloudflare terminates TLS but your app payload is separately encrypted), some practitioners argue a BAA isn't strictly required because Cloudflare can't read the PHI. This is a legal grey area — get your counsel's opinion.
+**The decision your organization must make and document in writing:**
 
-**Practical recommendation:** If you're on Cloudflare Business plan anyway for security features (WAF, bot protection, etc.), sign the BAA. If you're on Free/Pro, ensure PHI never appears in URLs, headers, or unencrypted payloads.
+| Situation | Required Action |
+|---|---|
+| On Cloudflare Business or Enterprise | Sign the BAA. No ambiguity. |
+| On Cloudflare Free or Pro, PHI appears only in encrypted payloads Cloudflare cannot read | Document the legal rationale in writing, reviewed by counsel. |
+| On Cloudflare Free or Pro, PHI could appear in URLs, headers, or unencrypted query params | Upgrade to Business and sign the BAA, or restructure the application so PHI never transits Cloudflare in readable form. |
+
+This decision cannot be left as "consult counsel later." Your compliance documentation must contain a written determination (one of the three rows above) before PHI enters production. An unresolved note in your architecture docs is not a defensible position under audit.
+
+**Practical recommendation for most nonprofits:** Cloudflare Business ($200/month) includes WAF, bot protection, and rate limiting that provide genuine security value beyond the BAA requirement. For organizations handling PHI at any scale, the BAA is worth the plan upgrade. Apply for Cloudflare's nonprofit discount program. It reduces the cost significantly.
+
+**Configuration requirements (all plans):**
 
 **Configuration requirements:**
 - Enable "Always Use HTTPS"
@@ -89,7 +99,7 @@ Hostinger hosts your public-facing WordPress site. The architectural rule is sim
 **What's safe on Hostinger:**
 - Public program information
 - General contact forms (name, email, phone — no health data)
-- Donation pages (payment handled by Stripe/Donorbox)
+- Donation pages (payment handled by Stripe/Givebutter)
 - Blog, news, organizational information
 
  
@@ -114,11 +124,11 @@ flowchart LR
 
  
 
-### Stripe & Donorbox ❌
-**BAA status:** Stripe does not sign BAAs. Donorbox does not sign BAAs.
+### Stripe & Givebutter ❌
+**BAA status:** Stripe does not sign BAAs. Givebutter does not sign BAAs.
 **PHI allowed:** No — these handle payment data under PCI-DSS, not health data under HIPAA.
 
-**The risk scenario to avoid:** A client who is also a donor. If your system ties a payment record to a client record that contains PHI, ensure the connection is one-directional and PHI never flows into Stripe or Donorbox.
+**The risk scenario to avoid:** A client who is also a donor. If your system ties a payment record to a client record that contains PHI, ensure the connection is one-directional and PHI never flows into Stripe or Givebutter.
 
 **Architecture rule:** Payment processing lives in its own data silo. Stripe webhooks fire into Cloud Functions, which update payment records in a non-PHI Firestore collection. Client records in Cloud SQL are never passed to Stripe.
 
@@ -145,7 +155,7 @@ Before go-live, answer yes to every item:
 - [ ] PHI never passes to Firebase Realtime Database
 - [ ] PHI never appears in Firebase Analytics event parameters
 - [ ] PHI never appears in Crashlytics reports (sanitize before reporting)
-- [ ] Stripe/Donorbox integrations never receive client health data
+- [ ] Stripe/Givebutter integrations never receive client health data
 - [ ] Cloudflare BAA signed OR all PHI payloads are separately encrypted
 - [ ] Salesforce usage is limited to non-PHI data OR Salesforce BAA is signed for your edition
 - [ ] PHI emails route to authenticated portal, not email body

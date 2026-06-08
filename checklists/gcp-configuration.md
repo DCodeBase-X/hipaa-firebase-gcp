@@ -74,6 +74,44 @@ Log filter:
 - [ ] Access to Secret Manager is restricted to necessary service accounts only
 - [ ] Secret versions are **disabled (not deleted)** when rotated, to preserve audit trail
 
+### Secrets Rotation Procedure
+
+**Rotation schedule**
+
+| Credential type | Interval | Also rotate when |
+|---|---|---|
+| Database password | 90 days | Suspected compromise |
+| API keys | 90 days | Suspected compromise |
+| Firebase service account key | 90 days | Suspected compromise |
+| All other credentials | Annually | Suspected compromise |
+
+**Who initiates rotation:** Security Officer or Lead Developer by written delegation. Every rotation must be logged (see rotation log below).
+
+**Standard rotation — step by step**
+
+1. In Secret Manager, add a new secret version. Do not delete or disable the old version yet.
+2. Redeploy any Cloud Functions that consume the secret. If the function references the `latest` version alias, redeployment picks up the new version automatically.
+3. Verify the new credential: run a test request and confirm Cloud Function logs show no authentication errors.
+4. Disable (do not delete) the old secret version — it is preserved for the audit trail but is no longer active.
+5. After 30 days with no issues, the old version may be permanently deleted.
+6. Record the rotation in the change log per `docs/14-change-control-policy.md`.
+
+**Emergency rotation (suspected compromise)**
+
+Act immediately — do not wait for the next scheduled window:
+
+1. Create a new secret version.
+2. Force-redeploy all Cloud Functions that used the compromised credential.
+3. Disable the old secret version immediately — the 30-day wait does not apply.
+4. Notify the Security Officer.
+5. Initiate incident response per `checklists/incident-response-runbook.md`.
+
+**Rotation log**
+
+| Secret Name | Rotated Date | Rotated By | Reason | New Version # | Old Version Disabled |
+|---|---|---|---|---|---|
+| | | | | | |
+
   
 
 ## Cloud SQL Checklist (GCP Level)

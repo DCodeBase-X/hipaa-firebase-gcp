@@ -45,3 +45,6 @@ node_modules/
 *.zip
 *.tar.gz
 .cache/
+
+# INTERNAL REVIEW (TPM analysis — not for public distribution)
+review/

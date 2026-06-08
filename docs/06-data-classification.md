@@ -59,6 +59,45 @@ Any of the above becomes PHI when combined with:
 
 ---
 
+## Records Requiring Heightened Protection — 42 CFR Part 2
+
+Substance Use Disorder (SUD) treatment records are subject to **42 CFR Part 2** in addition to HIPAA. These are not interchangeable.
+
+| Rule | HIPAA | 42 CFR Part 2 |
+|---|---|---|
+| Who it covers | All covered entities | Programs that provide SUD diagnosis, treatment, or referral |
+| Disclosure to other covered entities | Permitted with certain exceptions | **Requires explicit patient consent** — no exceptions for treatment, payment, or operations |
+| Law enforcement disclosure | Limited exceptions exist | Extremely restricted — court order required |
+| Penalty for violation | Civil / criminal | Federal criminal statute |
+
+**What this means architecturally:**
+
+SUD records stored in Cloud SQL must be identifiable as Part 2-protected so the system can enforce the additional consent requirement before any disclosure. A field like `sensitivity_tier` on the `health_records` table allows Cloud Functions to apply heightened restrictions at query time.
+
+```sql
+-- Minimum schema addition to support Part 2 enforcement
+ALTER TABLE health_records
+  ADD COLUMN sensitivity_tier VARCHAR(20) DEFAULT 'hipaa'
+  CHECK (sensitivity_tier IN ('hipaa', 'part2', 'ferpa'));
+```
+
+```javascript
+// Cloud Function must check sensitivity tier before any disclosure
+if (record.sensitivity_tier === 'part2') {
+  const consent = await getPatientConsent(clientId, 'sud_disclosure');
+  if (!consent?.active) {
+    throw new functions.https.HttpsError(
+      'permission-denied',
+      '42 CFR Part 2 requires patient consent before this record can be disclosed'
+    );
+  }
+}
+```
+
+**Organizations that have not implemented Part 2 enforcement must not store SUD treatment records in this system until they do.** Storing these records without enforcement controls is not a HIPAA violation — it is a violation of a federal criminal statute.
+
+---
+
 ## Sensitive Non-PHI — Stored in Firestore (Layer 2)
 
 This data is personally identifiable but not clinical health information. It requires security controls but not the same strict PHI handling.

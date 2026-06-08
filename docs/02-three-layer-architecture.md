@@ -59,7 +59,7 @@ flowchart TD
 **Rules:**
 - No PHI of any kind enters this layer
 - Contact forms collect name/email/phone only — never health information
-- Donation processing routes to Stripe/Donorbox — neither has PHI
+- Donation processing routes to Stripe/Givebutter — neither has PHI
 - No database connection to Layer 2 or Layer 3 exists from this layer
 - Authentication happens at Layer 2 (Firebase Auth) — WordPress does not authenticate PHI users
 

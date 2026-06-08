@@ -2,7 +2,7 @@
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 
-A practical reference for building HIPAA-compliant systems on Firebase and Google Cloud Platform — written for nonprofits, solo consultants, and small technical teams who can't afford a dedicated security architect.
+A practical reference for building HIPAA-compliant systems on Firebase and Google Cloud Platform, written for nonprofits, solo consultants, and small technical teams who can't afford a dedicated security architect.
 
 **The gap this fills:** AWS and GCP publish HIPAA compliance docs for enterprise teams. They assume you have a solutions architect, a legal team, and a six-figure cloud budget. They don't cover what it actually looks like to build a compliant system on Firebase when your organization has 12 staff, a $60K tech budget, and a mix of Hostinger, Firebase, Cloudflare, and Salesforce in play.
 
@@ -14,7 +14,7 @@ This repo is built from a real implementation: a HIPAA-compliant 3-layer cloud s
 
 - **Nonprofit technology directors** evaluating Firebase/GCP for programs that handle health data, criminal justice records, or other PHI
 - **Consultants and freelancers** advising organizations on HIPAA-compliant cloud architecture
-- **Developers** building on Firebase who need to understand what HIPAA compliance actually requires in code and configuration — not just checkboxes
+- **Developers** building on Firebase who need to understand what HIPAA compliance actually requires in code and configuration, not just checkboxes
 - **Grant writers and funders** who need to assess whether a proposed technology system is genuinely HIPAA-ready
 
  
@@ -116,7 +116,7 @@ flowchart TD
 
 **Firebase Realtime Database is NOT covered under Google's BAA.**
 
-If your app stores PHI and you're using Firebase Realtime Database — not Firestore — you are out of compliance. Full stop. Firestore is covered. Realtime Database is not. This distinction is buried in Google's BAA documentation and catches teams off guard constantly.
+If your app stores PHI and you're using Firebase Realtime Database (not Firestore), you are out of compliance. Full stop. Firestore is covered. Realtime Database is not. This distinction is buried in Google's BAA documentation and catches teams off guard constantly.
 
 [Full breakdown →](docs/03-firebase-hipaa-guide.md#what-is-and-isnt-covered)
 
@@ -167,7 +167,7 @@ Built from a real implementation. This is a complete overview of the HIPAA-compl
 
  
 
-> **Disclaimer:** This is a technical reference guide, not legal advice. HIPAA compliance is a legal obligation — engage qualified legal counsel for your specific situation. This guide addresses technical and architectural implementation only.
+> **Disclaimer:** This is a technical reference guide, not legal advice. HIPAA compliance is a legal obligation. Engage qualified legal counsel for your specific situation. This guide addresses technical and architectural implementation only.
 
  
 
@@ -175,6 +175,6 @@ Built from a real implementation. This is a complete overview of the HIPAA-compl
 
 This work is licensed under [Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/).
 
-You are free to share and adapt this material for non-commercial purposes with attribution. Commercial use — including reselling or repackaging this content as a paid deliverable — is not permitted without written permission.
+You are free to share and adapt this material for non-commercial purposes with attribution. Commercial use (including reselling or repackaging this content as a paid deliverable) is not permitted without written permission.
 
 © 2026 Damarius McNair

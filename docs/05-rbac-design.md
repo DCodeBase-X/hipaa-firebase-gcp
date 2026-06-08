@@ -13,17 +13,13 @@ flowchart TD
     subgraph Roles["Staff Roles — Firebase Custom Claims"]
         ADM["admin\nFull system access\nUser management\nAudit log review"]
         CS["clinical_staff\nPHI access for assigned clients\nIntake · Assessments · Case notes"]
-        PS["program_staff\nNon-PHI program data\nSchedules · Tasks · Enrollment status"]
+        PS["program_staff\nNon-PHI program data\nSchedules · Tasks · Enrollment status\n(assigned programs only)"]
         VOL["volunteer\nVolunteer portal only\nNo client data"]
     end
 
     subgraph Client["Client-Facing Roles"]
         CLI["client\nOwn records only\nPortal access"]
-        FAM["family_member\nLimited, with client consent"]
-    end
-
-    subgraph System["System Roles"]
-        SVC["service_account\nCloud Functions · Automated jobs"]
+        FAM["family_member\nLimited read — with client consent\nRequires explicit client authorization record"]
     end
 
     ADM -->|"Can manage"| CS
@@ -31,15 +27,19 @@ flowchart TD
     ADM -->|"Can manage"| VOL
 ```
 
+> **Note on service accounts:** Cloud Functions access Layer 3 (Cloud SQL, Cloud Storage) using GCP IAM service accounts — not Firebase custom claims. Service account permissions are governed at the GCP IAM level, separate from this RBAC model.
+
+> **Note on `family_member`:** This role is defined for future implementation. It requires a client-signed authorization record before any access is granted. It must not be assigned until the authorization workflow is implemented and the Firestore rules below are extended to enforce it.
+
  
 
 ## Role-to-Data Access Matrix
 
 | Data Type | admin | clinical_staff | program_staff | volunteer | client |
-| |: :|: :|: :|: :|: :|
+| |:---:|:---:|:---:|:---:|:---:|
 | Client PHI (health, assessments) | ✅ All | ✅ Assigned only | ❌ | ❌ | ✅ Own only |
 | Client demographics | ✅ All | ✅ Assigned only | ✅ Limited | ❌ | ✅ Own only |
-| Program enrollment status | ✅ | ✅ | ✅ | ❌ | ✅ Own only |
+| Program enrollment status | ✅ | ✅ | ✅ Assigned programs only | ❌ | ✅ Own only |
 | Case notes | ✅ | ✅ Assigned only | ❌ | ❌ | ✅ Own only |
 | Staff schedules | ✅ | ✅ Own | ✅ Own | ✅ Own | ❌ |
 | Volunteer records | ✅ | ❌ | ✅ | ✅ Own | ❌ |
@@ -53,39 +53,102 @@ flowchart TD
 
 Roles are stored as custom claims on the Firebase user record. Claims are included in the ID token and available in Firestore Security Rules and Cloud Functions without an additional database query.
 
-**Setting a role (Cloud Function — admin only):**
+> **JWT size limit:** Firebase custom claims are limited to 1000 bytes. Do not store `assignedClients` arrays in the JWT — this will silently fail for staff assigned to more than ~30 clients. Client-staff assignments are stored in a Firestore `staff_assignments` collection and validated server-side in Cloud Functions.
+
+**Assigning a role (Cloud Function — admin only):**
+
 ```javascript
 const admin = require('firebase-admin');
 
 exports.assignUserRole = functions.https.onCall(async (data, context) => {
-  // Only admins can assign roles
-  if (!context.auth?.token?.role === 'admin') {
+  // Step 1: Verify the caller is authenticated
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'Login required');
+  }
+
+  // Step 2: Verify the caller has the admin role
+  // NOTE: Do NOT write this as: !context.auth?.token?.role === 'admin'
+  // That expression is always false due to operator precedence. It is a no-op.
+  if (context.auth.token.role !== 'admin') {
     throw new functions.https.HttpsError('permission-denied', 'Admins only');
   }
 
-  const { uid, role, assignedClients } = data;
+  const { uid, role } = data;
   const validRoles = ['admin', 'clinical_staff', 'program_staff', 'volunteer', 'client'];
+
+  if (!uid || typeof uid !== 'string') {
+    throw new functions.https.HttpsError('invalid-argument', 'uid is required');
+  }
 
   if (!validRoles.includes(role)) {
     throw new functions.https.HttpsError('invalid-argument', `Invalid role: ${role}`);
   }
 
-  const claims = { role };
+  // Capture the previous role before overwriting for the audit record
+  const existingUser = await admin.auth().getUser(uid);
+  const previousRole = existingUser.customClaims?.role ?? null;
 
-  // Clinical staff get a list of client IDs they can access
-  if (role === 'clinical_staff' && assignedClients?.length) {
-    claims.assignedClients = assignedClients;
+  // Set the new role — only the role claim; assignments are managed separately
+  await admin.auth().setCustomUserClaims(uid, { role });
+
+  // Revoke existing tokens immediately so the role change takes effect now,
+  // not when the user's current token expires (up to 1 hour later)
+  await admin.auth().revokeRefreshTokens(uid);
+
+  // Audit log: record who changed what, from what, to what
+  await admin.firestore().collection('audit_logs').add({
+    action:       'role_assigned',
+    targetUid:    uid,
+    previousRole: previousRole,
+    newRole:      role,
+    assignedBy:   context.auth.uid,
+    timestamp:    admin.firestore.FieldValue.serverTimestamp(),
+  });
+
+  return { success: true };
+});
+```
+
+**Revoking access at termination (Cloud Function — admin only):**
+
+```javascript
+exports.revokeUserAccess = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'Login required');
+  }
+  if (context.auth.token.role !== 'admin') {
+    throw new functions.https.HttpsError('permission-denied', 'Admins only');
   }
 
-  await admin.auth().setCustomUserClaims(uid, claims);
+  const { uid } = data;
+  if (!uid || typeof uid !== 'string') {
+    throw new functions.https.HttpsError('invalid-argument', 'uid is required');
+  }
 
-  // Log the role change (audit trail)
+  const existingUser = await admin.auth().getUser(uid);
+  const previousRole = existingUser.customClaims?.role ?? null;
+
+  // Disable the account and clear all claims
+  await admin.auth().updateUser(uid, { disabled: true });
+  await admin.auth().setCustomUserClaims(uid, {});
+  await admin.auth().revokeRefreshTokens(uid);
+
+  // Remove any staff assignments from Firestore
+  const assignmentSnap = await admin.firestore()
+    .collection('staff_assignments')
+    .where('staffId', '==', uid)
+    .get();
+
+  const batch = admin.firestore().batch();
+  assignmentSnap.forEach(doc => batch.delete(doc.ref));
+  await batch.commit();
+
   await admin.firestore().collection('audit_logs').add({
-    action:    'role_assigned',
-    targetUid: uid,
-    role:      role,
-    assignedBy: context.auth.uid,
-    timestamp: admin.firestore.FieldValue.serverTimestamp(),
+    action:       'access_revoked',
+    targetUid:    uid,
+    previousRole: previousRole,
+    revokedBy:    context.auth.uid,
+    timestamp:    admin.firestore.FieldValue.serverTimestamp(),
   });
 
   return { success: true };
@@ -93,6 +156,7 @@ exports.assignUserRole = functions.https.onCall(async (data, context) => {
 ```
 
 **Reading the role on the client:**
+
 ```javascript
 import { getAuth } from 'firebase/auth';
 
@@ -100,7 +164,7 @@ async function getUserRole() {
   const user = getAuth().currentUser;
   if (!user) return null;
 
-  // Force refresh to get latest claims
+  // Force refresh to get latest claims after any server-side role change
   const token = await user.getIdTokenResult(true);
   return token.claims.role;
 }
@@ -110,14 +174,15 @@ async function getUserRole() {
 
 ## Implementation: Firestore Security Rules
 
-Firestore Security Rules enforce access at the database layer — even if your Cloud Functions have a bug, the rules provide a safety net.
+Firestore Security Rules enforce access at the database layer — a defense-in-depth measure even if Cloud Function logic contains an error.
 
 ```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper functions
+    // ── Helper functions ─────────────────────────────────────
+
     function isAuthenticated() {
       return request.auth != null;
     }
@@ -134,9 +199,17 @@ service cloud.firestore {
       return hasRole('clinical_staff');
     }
 
+    // Client-staff assignment is validated via Firestore, not JWT claims,
+    // to avoid the 1000-byte JWT size limit
     function isAssignedToClient(clientId) {
       return isClinicalStaff()
-        && clientId in request.auth.token.get('assignedClients', []);
+        && exists(/databases/$(database)/documents/staff_assignments/$(request.auth.uid + '_' + clientId));
+    }
+
+    // Program staff assignment — staff may only access programs they manage
+    function isAssignedToProgram(programId) {
+      return hasRole('program_staff')
+        && exists(/databases/$(database)/documents/program_assignments/$(request.auth.uid + '_' + programId));
     }
 
     function isOwnRecord(userId) {
@@ -149,34 +222,51 @@ service cloud.firestore {
     }
 
     // ── Non-PHI: Program enrollment (no clinical data) ──────
+    // program_staff access is scoped to assigned programs only (minimum necessary)
     match /program_enrollment/{recordId} {
       allow read: if isAdmin()
         || isClinicalStaff()
-        || (hasRole('program_staff'))
+        || isAssignedToProgram(resource.data.programId)
         || (hasRole('client') && resource.data.clientId == request.auth.uid);
-      allow write: if isAdmin() || isClinicalStaff();
+      allow create, update: if isAdmin() || isClinicalStaff();
+      allow delete: if isAdmin();
+    }
+
+    // ── Staff assignments (clinical) ─────────────────────────
+    match /staff_assignments/{assignmentId} {
+      allow read: if isAdmin()
+        || (isClinicalStaff() && resource.data.staffId == request.auth.uid);
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ── Program assignments (program staff) ──────────────────
+    match /program_assignments/{assignmentId} {
+      allow read: if isAdmin()
+        || (hasRole('program_staff') && resource.data.staffId == request.auth.uid);
+      allow create, update, delete: if isAdmin();
     }
 
     // ── Staff schedules ──────────────────────────────────────
     match /schedules/{scheduleId} {
       allow read: if isAuthenticated()
-        && (isAdmin()
-            || resource.data.staffId == request.auth.uid);
-      allow write: if isAdmin();
+        && (isAdmin() || resource.data.staffId == request.auth.uid);
+      allow create, update: if isAdmin();
+      allow delete: if isAdmin();
     }
 
     // ── Volunteer records (no PHI) ───────────────────────────
     match /volunteers/{volunteerId} {
       allow read: if isAdmin()
-        || (hasRole('program_staff'))
+        || hasRole('program_staff')
         || (hasRole('volunteer') && volunteerId == request.auth.uid);
-      allow write: if isAdmin() || hasRole('program_staff');
+      allow create, update: if isAdmin() || hasRole('program_staff');
+      allow delete: if isAdmin();
     }
 
-    // ── Audit logs — read admin only, write Functions only ───
+    // ── Audit logs — read admin only, write Cloud Functions only ─
     match /audit_logs/{logId} {
       allow read: if isAdmin();
-      allow write: if false; // Cloud Functions only via Admin SDK
+      allow write: if false; // Written exclusively via Admin SDK in Cloud Functions
     }
 
     // ── NOTE: PHI (client health records) lives in Cloud SQL ─
@@ -187,11 +277,15 @@ service cloud.firestore {
 
  
 
-## Implementation: Cloud Function Access Control
+## Implementation: Cloud Function PHI Access Control
 
-Every Cloud Function that touches PHI should follow this pattern:
+Every Cloud Function that touches PHI must follow this validation pattern. The steps must execute in order — no data operation may occur before all validations pass.
 
 ```javascript
+const admin = require('firebase-admin');
+const functions = require('firebase-functions');
+
+// Reusable validator — call this at the top of every PHI-touching function
 async function validatePhiAccess(context, clientId) {
   // 1. Must be authenticated
   if (!context.auth) {
@@ -200,35 +294,67 @@ async function validatePhiAccess(context, clientId) {
 
   const { role, uid } = context.auth.token;
 
-  // 2. Must have a PHI-eligible role
+  // 2. Verify MFA is enrolled for roles that require it (server-side check)
+  if (['admin', 'clinical_staff'].includes(role)) {
+    const user = await admin.auth().getUser(uid);
+    if (!user.multiFactor?.enrolledFactors?.length) {
+      throw new functions.https.HttpsError(
+        'failed-precondition',
+        'MFA enrollment required for this role'
+      );
+    }
+  }
+
+  // 3. Must have a PHI-eligible role
   if (!['admin', 'clinical_staff'].includes(role)) {
     throw new functions.https.HttpsError('permission-denied',
       `Role '${role}' cannot access PHI`);
   }
 
-  // 3. Clinical staff can only access assigned clients
+  // 4. Validate clientId format before using it in any query
+  if (!clientId || typeof clientId !== 'string' || clientId.trim().length === 0) {
+    throw new functions.https.HttpsError('invalid-argument', 'Valid clientId is required');
+  }
+
+  // 5. Clinical staff may only access assigned clients
+  //    Assignment is validated against Firestore, not JWT claims
   if (role === 'clinical_staff') {
-    const assignedClients = context.auth.token.assignedClients || [];
-    if (!assignedClients.includes(clientId)) {
+    const assignmentId = `${uid}_${clientId}`;
+    const assignment = await admin.firestore()
+      .collection('staff_assignments')
+      .doc(assignmentId)
+      .get();
+
+    if (!assignment.exists) {
       throw new functions.https.HttpsError('permission-denied',
         'Not assigned to this client');
     }
   }
 
-  // 4. Return validated identity for audit logging
+  // Return validated identity for downstream audit logging
   return { uid, role };
 }
 
-// Usage in any PHI-accessing function:
+// Audit logger — call after every PHI access, never include PHI field values
+async function logPhiAccess({ action, clientId, accessedBy, role }) {
+  await admin.firestore().collection('audit_logs').add({
+    action,
+    clientId,
+    accessedBy,
+    role,
+    timestamp: admin.firestore.FieldValue.serverTimestamp(),
+  });
+}
+
+// Example: retrieving a client record
 exports.getClientRecord = functions.https.onCall(async (data, context) => {
   const { uid, role } = await validatePhiAccess(context, data.clientId);
 
   const record = await queryClientFromSQL(data.clientId);
 
-  // Audit log every PHI access
   await logPhiAccess({
-    action:   'read_client_record',
-    clientId: data.clientId,
+    action:     'read_client_record',
+    clientId:   data.clientId,
     accessedBy: uid,
     role,
   });
@@ -241,20 +367,65 @@ exports.getClientRecord = functions.https.onCall(async (data, context) => {
 
 ## MFA Enforcement by Role
 
+MFA enforcement must be validated **server-side** inside `validatePhiAccess` (shown above). Client-side redirection to an enrollment page is a UX convenience only — it is bypassable by any caller that invokes the Cloud Function directly without going through the client application.
+
 ```javascript
-// Enforce MFA on login for clinical and admin roles
+// Client-side MFA check — UX only, not a security control
 export async function enforceRoleMfa(user, role) {
   const mfaEnrolled = user.multiFactor?.enrolledFactors?.length > 0;
   const mfaRequired = ['admin', 'clinical_staff'].includes(role);
 
   if (mfaRequired && !mfaEnrolled) {
-    // Sign out and redirect to MFA enrollment
     await getAuth().signOut();
     router.push('/setup-mfa?required=true&role=' + role);
     return false;
   }
   return true;
 }
+```
+
+The server-side MFA check in `validatePhiAccess` is the authoritative enforcement point. The client-side check above improves user experience by surfacing the enrollment requirement early — it is not a substitute for server-side validation.
+
+ 
+
+## Staff Assignment Management
+
+Client-staff assignments are stored in Firestore under `staff_assignments/{staffId}_{clientId}`. This replaces the previous pattern of embedding an `assignedClients` array in the Firebase Auth custom claims JWT, which has a hard 1000-byte size limit that causes silent failures at scale.
+
+**Adding a client assignment:**
+
+```javascript
+exports.assignClientToStaff = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'Login required');
+  }
+  if (context.auth.token.role !== 'admin') {
+    throw new functions.https.HttpsError('permission-denied', 'Admins only');
+  }
+
+  const { staffId, clientId } = data;
+  if (!staffId || !clientId) {
+    throw new functions.https.HttpsError('invalid-argument', 'staffId and clientId are required');
+  }
+
+  const assignmentId = `${staffId}_${clientId}`;
+  await admin.firestore().collection('staff_assignments').doc(assignmentId).set({
+    staffId,
+    clientId,
+    assignedBy: context.auth.uid,
+    assignedAt: admin.firestore.FieldValue.serverTimestamp(),
+  });
+
+  await admin.firestore().collection('audit_logs').add({
+    action:     'client_assigned',
+    staffId,
+    clientId,
+    assignedBy: context.auth.uid,
+    timestamp:  admin.firestore.FieldValue.serverTimestamp(),
+  });
+
+  return { success: true };
+});
 ```
 
  

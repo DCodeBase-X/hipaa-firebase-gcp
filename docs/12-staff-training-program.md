@@ -1,5 +1,12 @@
 # HIPAA Staff Training Program
 
+**Version**: 1.0  
+**Effective Date**: [MM/DD/YYYY]  
+**Review Cycle**: Annual  
+**Document Owner**: Security Officer  
+
+---
+
 > **Reference**: 45 CFR § 164.308(a)(5) — Security Awareness and Training (Administrative Safeguard)
 > 45 CFR § 164.530(b) — Training (Privacy Rule)
 

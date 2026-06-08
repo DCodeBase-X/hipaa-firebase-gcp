@@ -1,5 +1,12 @@
 # HIPAA Administrative Policies
 
+**Version**: 1.0  
+**Effective Date**: [MM/DD/YYYY]  
+**Review Cycle**: Annual, or after any significant system change  
+**Document Owner**: Security Officer  
+
+---
+
 > **Reference**: 45 CFR § 164.308 — Administrative Safeguards
 > Administrative safeguards are the policies and procedures that govern how the organization manages ePHI security at the people and process level.
 
@@ -316,6 +323,54 @@ Maintain a current inventory of all BAAs:
 
 - [ ] Review BAA inventory annually
 - [ ] Remove any vendor receiving ePHI that cannot or will not sign a BAA
+
+---
+
+## Policy 10: Service Availability
+
+**Reference**: 45 CFR § 164.308(a)(7) (Contingency Plan — operational complement); internal operational policy
+
+### 10.1 Purpose
+
+Define reasonable uptime expectations for systems that support active client services, so that staff, leadership, and funders share a common understanding of availability commitments and outage response.
+
+### 10.2 Availability Targets
+
+These are internal operational targets, not contractual guarantees. Actual availability depends on underlying Google Cloud Platform and Firebase infrastructure (see Policy 9 for vendor BAA and SLA context).
+
+| System | Monthly Uptime Target | Allowable Downtime / Month |
+|--------|-----------------------|---------------------------|
+| Cloud Functions + Firebase Auth (application layer) | 99.0% | ~7.3 hours |
+| Cloud SQL — PHI data store (HA enabled) | 99.5% | ~3.6 hours |
+| Email / push notifications | Best effort | No formal target |
+
+### 10.3 Measurement
+
+Uptime is measured using GCP Cloud Monitoring Uptime Checks and the Firebase console. The Security Officer or designated technical lead reviews the monthly availability report from these dashboards and retains reports for 6 years.
+
+### 10.4 Planned Maintenance Windows
+
+- Planned maintenance shall be scheduled **outside of core service hours** (preferred: weekdays 9 PM–6 AM or weekends).
+- Staff shall receive **at least 48 hours advance notice** via email before any planned downtime expected to exceed 15 minutes.
+- Emergency patches may proceed with shorter notice; staff shall be notified as soon as practicable.
+
+### 10.5 Unplanned Outage Response
+
+| Severity | Definition | Acknowledge By | Restore Target |
+|----------|------------|----------------|----------------|
+| **Critical** | PHI access blocked; active client services impacted | 15 minutes | 4 hours |
+| **High** | Non-PHI functions degraded; workaround not available | 1 hour | 8 hours |
+| **Low** | Cosmetic issue or workaround exists | Next business day | Next business day |
+
+Response times begin when the Security Officer or on-call technical contact is notified. Notification channels: direct phone call for Critical; email for High and Low.
+
+### 10.6 Reporting
+
+The Security Officer shall provide a monthly uptime summary to the Executive Director covering: achieved uptime per system, any outages and their duration, and status of any open corrective actions.
+
+### 10.7 Vendor Dependency Limitation
+
+This organization's uptime targets are bounded by Google Cloud Platform and Firebase availability. Google's own SLAs govern the underlying infrastructure. In the event of a GCP or Firebase outage, this organization's response is limited to activating the emergency mode procedures in **Policy 7.3**. See **Policy 9** for BAA and vendor accountability documentation.
 
 ---
 

@@ -1,5 +1,12 @@
 # HIPAA Physical Safeguards
 
+**Version**: 1.0  
+**Effective Date**: [MM/DD/YYYY]  
+**Review Cycle**: Annual, or after any significant system change  
+**Document Owner**: Security Officer  
+
+---
+
 > **Reference**: 45 CFR § 164.310 — Physical Safeguards
 > These are required safeguards for all Covered Entities and Business Associates under the HIPAA Security Rule.
 

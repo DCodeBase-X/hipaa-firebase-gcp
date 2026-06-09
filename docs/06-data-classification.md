@@ -15,7 +15,7 @@ Knowing what counts as PHI in your system determines your entire security archit
 
 ---
 
-## PHI — Stored in Cloud SQL / Cloud Storage Only
+## PHI: Stored in Cloud SQL / Cloud Storage Only
 
 These fields constitute PHI for a social services or reentry nonprofit. They must live in Layer 3 and be accessed only through authenticated Cloud Functions.
 
@@ -59,15 +59,15 @@ Any of the above becomes PHI when combined with:
 
 ---
 
-## Records Requiring Heightened Protection — 42 CFR Part 2
+## Records Requiring Heightened Protection: 42 CFR Part 2
 
 Substance Use Disorder (SUD) treatment records are subject to **42 CFR Part 2** in addition to HIPAA. These are not interchangeable.
 
 | Rule | HIPAA | 42 CFR Part 2 |
 |---|---|---|
 | Who it covers | All covered entities | Programs that provide SUD diagnosis, treatment, or referral |
-| Disclosure to other covered entities | Permitted with certain exceptions | **Requires explicit patient consent** — no exceptions for treatment, payment, or operations |
-| Law enforcement disclosure | Limited exceptions exist | Extremely restricted — court order required |
+| Disclosure to other covered entities | Permitted with certain exceptions | **Requires explicit patient consent**: no exceptions for treatment, payment, or operations |
+| Law enforcement disclosure | Limited exceptions exist | Extremely restricted: court order required |
 | Penalty for violation | Civil / criminal | Federal criminal statute |
 
 **What this means architecturally:**
@@ -94,30 +94,30 @@ if (record.sensitivity_tier === 'part2') {
 }
 ```
 
-**Organizations that have not implemented Part 2 enforcement must not store SUD treatment records in this system until they do.** Storing these records without enforcement controls is not a HIPAA violation — it is a violation of a federal criminal statute.
+**Organizations that have not implemented Part 2 enforcement must not store SUD treatment records in this system until they do.** Storing these records without enforcement controls is not a HIPAA violation; it is a violation of a federal criminal statute.
 
 ---
 
-## Sensitive Non-PHI — Stored in Firestore (Layer 2)
+## Sensitive Non-PHI: Stored in Firestore (Layer 2)
 
 This data is personally identifiable but not clinical health information. It requires security controls but not the same strict PHI handling.
 
 - First name + last name (without health data attached)
 - Contact information (phone, email) in the volunteer/donor context
 - Staff employment records, performance data
-- Volunteer background check status (pass/fail — not the full report)
+- Volunteer background check status (pass/fail: not the full report)
 - Donor giving history and contact preferences
 - Organizational financial data
 
 ---
 
-## Operational Data — Stored in Firestore (Layer 2)
+## Operational Data: Stored in Firestore (Layer 2)
 
 No PII attached. Safe to store in Firestore without HIPAA-specific controls, though general security best practices still apply.
 
 - Program enrollment counts (de-identified)
 - Schedule slots and availability windows
-- Task assignments (staff ID + task ID — no client data in the task record)
+- Task assignments (staff ID + task ID: no client data in the task record)
 - System notifications and alerts
 - Aggregate reporting metrics
 - Internal documentation and SOPs
@@ -152,7 +152,7 @@ flowchart TD
 
 ## Firestore Document Schema Examples
 
-**✅ Correct — Firestore enrollment record (no PHI)**
+**✅ Correct: Firestore enrollment record (no PHI)**
 ```json
 {
   "clientId": "client_abc123",
@@ -166,7 +166,7 @@ flowchart TD
 
 No health data. No diagnosis. No criminal history. Just program logistics. This is safe in Firestore.
 
-**❌ Wrong — PHI mixed into Firestore**
+**❌ Wrong: PHI mixed into Firestore**
 ```json
 {
   "clientId": "client_abc123",
@@ -178,7 +178,7 @@ No health data. No diagnosis. No criminal history. Just program logistics. This 
 }
 ```
 
-`diagnosis`, `medications`, and `priorConvictions` are PHI. This document should not be in Firestore — that data belongs in Cloud SQL.
+`diagnosis`, `medications`, and `priorConvictions` are PHI. This document should not be in Firestore; that data belongs in Cloud SQL.
 
 ---
 
@@ -187,8 +187,8 @@ No health data. No diagnosis. No criminal history. Just program logistics. This 
 HIPAA doesn't mandate a specific retention period, but many state laws and program requirements do. Design your system to support:
 
 - **Retention policies:** Cloud SQL and Cloud Storage lifecycle rules to auto-delete records after a defined period
-- **Right to access:** Clients can request their records — your Cloud Functions should support this query
-- **Deletion requests:** Staff can mark records for deletion — implement soft-delete first, hard-delete on schedule
+- **Right to access:** Clients can request their records: your Cloud Functions should support this query
+- **Deletion requests:** Staff can mark records for deletion: implement soft-delete first, hard-delete on schedule
 - **Audit trail preservation:** Audit logs must be retained even when the underlying PHI is deleted
 
 ```sql

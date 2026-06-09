@@ -1,6 +1,6 @@
 # HIPAA Risk Register
 
-> **Reference**: 45 CFR § 164.308(a)(1) — Risk Analysis and Risk Management
+> **Reference**: 45 CFR § 164.308(a)(1) (Risk Analysis and Risk Management)
 > **See also**: `docs/08-risk-analysis-template.md` for the full risk analysis methodology.
 
 This register is the living record of all identified risks to ePHI. It should be updated:
@@ -37,7 +37,7 @@ Retain all versions of this document for **6 years**.
 |-------|-------|
 | **Risk ID** | R-2024-001 |
 | **Date Identified** | |
-| **Risk Title** | Compromised staff credentials — no MFA |
+| **Risk Title** | Compromised staff credentials: no MFA |
 | **Threat Event** | Unauthorized access via stolen or phished password |
 | **Vulnerability** | MFA not enforced for all Firebase Auth accounts |
 | **ePHI Systems at Risk** | Firebase Auth, Cloud SQL (via Cloud Functions) |
@@ -172,7 +172,7 @@ Retain all versions of this document for **6 years**.
 | **Residual Risk Accepted By** | |
 | **Date Accepted** | |
 | **Related Incident** | N/A |
-| **Notes** | Firebase Realtime Database is explicitly excluded — never store PHI there |
+| **Notes** | Firebase Realtime Database is explicitly excluded: never store PHI there |
 
 ---
 
@@ -211,7 +211,7 @@ Retain all versions of this document for **6 years**.
 |-------|-------|
 | **Risk ID** | R-2024-007 |
 | **Date Identified** | |
-| **Risk Title** | Insufficient audit logging — PHI access not traceable |
+| **Risk Title** | Insufficient audit logging: PHI access not traceable |
 | **Threat Event** | Security incident occurs but cannot be fully investigated due to missing logs |
 | **Vulnerability** | Cloud Audit Logs Data Access logs not enabled; log retention too short |
 | **ePHI Systems at Risk** | Cloud SQL, Firestore, Cloud Storage, Cloud Functions |
@@ -230,7 +230,7 @@ Retain all versions of this document for **6 years**.
 | **Residual Risk Accepted By** | |
 | **Date Accepted** | |
 | **Related Incident** | N/A |
-| **Notes** | See `checklists/gcp-configuration.md` — Audit Logs section |
+| **Notes** | See `checklists/gcp-configuration.md`: Audit Logs section |
 
 ---
 
@@ -238,7 +238,7 @@ Retain all versions of this document for **6 years**.
 
 | Risk ID | Title | Score | Level | Status | Owner |
 |---------|-------|------:|-------|--------|-------|
-| R-2024-001 | Compromised credentials — no MFA | 6 | High | | |
+| R-2024-001 | Compromised credentials: no MFA | 6 | High | | |
 | R-2024-002 | PHI sent via unencrypted email | 6 | High | | |
 | R-2024-003 | Firestore Security Rules misconfiguration | 4 | Medium | | |
 | R-2024-004 | Lost/stolen unencrypted device | 4 | Medium | | |
@@ -297,7 +297,7 @@ Copy the template below for each new risk:
 
 ## Related Documents
 
-- `docs/08-risk-analysis-template.md` — Methodology for identifying and scoring risks
-- `docs/11-administrative-policies.md` — Risk management policy
-- `checklists/incident-response-runbook.md` — Update register after incidents
-- `checklists/pre-launch-audit.md` — Verify controls before go-live
+- `docs/08-risk-analysis-template.md`: Methodology for identifying and scoring risks
+- `docs/11-administrative-policies.md`: Risk management policy
+- `checklists/incident-response-runbook.md`: Update register after incidents
+- `checklists/pre-launch-audit.md`: Verify controls before go-live

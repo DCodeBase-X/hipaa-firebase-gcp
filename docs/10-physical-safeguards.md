@@ -7,7 +7,7 @@
 
 ---
 
-> **Reference**: 45 CFR § 164.310 — Physical Safeguards
+> **Reference**: 45 CFR § 164.310 (Physical Safeguards)
 > These are required safeguards for all Covered Entities and Business Associates under the HIPAA Security Rule.
 
 Physical safeguards govern access to the physical locations and devices that contain or access ePHI. Even when your ePHI lives in the cloud, staff workstations, mobile devices, and office facilities remain within scope.
@@ -103,9 +103,9 @@ All devices that access ePHI must have full-disk encryption enabled:
 For organizations with 5+ staff devices accessing ePHI, implement MDM:
 
 **Recommended MDM options for nonprofits**:
-- **Jamf** (Apple devices) — discounted nonprofit pricing
-- **Microsoft Intune** — included with Microsoft 365 Business Premium
-- **Google Workspace MDM** — basic, included with Workspace
+- **Jamf** (Apple devices): discounted nonprofit pricing
+- **Microsoft Intune**: included with Microsoft 365 Business Premium
+- **Google Workspace MDM**: basic, included with Workspace
 
 Minimum MDM policy requirements:
 - [ ] Remote wipe capability
@@ -212,7 +212,7 @@ Name (printed): _______________________________________________ Title: _________
 
 ## Related Documents
 
-- `docs/11-administrative-policies.md` — Workforce sanctions and access management
-- `docs/12-staff-training-program.md` — Training requirements
-- `checklists/incident-response-runbook.md` — Lost/stolen device response
-- `docs/08-risk-analysis-template.md` — Physical risks in the risk analysis
+- `docs/11-administrative-policies.md`: Workforce sanctions and access management
+- `docs/12-staff-training-program.md`: Training requirements
+- `checklists/incident-response-runbook.md`: Lost/stolen device response
+- `docs/08-risk-analysis-template.md`: Physical risks in the risk analysis

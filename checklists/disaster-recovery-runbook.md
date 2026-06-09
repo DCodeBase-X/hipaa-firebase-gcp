@@ -1,6 +1,6 @@
 # Disaster Recovery Runbook
 
-> **Reference**: 45 CFR § 164.308(a)(7) — Contingency Plan
+> **Reference**: 45 CFR § 164.308(a)(7) (Contingency Plan)
 > **See also**: `docs/11-administrative-policies.md` §7 for RTO/RPO targets and policy context.
 
 This runbook provides executable step-by-step procedures for each recovery scenario. It is not a policy document. It is the procedure you run when something breaks. Keep it accessible offline (printed or local copy) in case the system you are recovering is the one you would normally use to read it.
@@ -57,7 +57,7 @@ This runbook provides executable step-by-step procedures for each recovery scena
 
 5. **Document the incident**
    - Log in the incident register: `checklists/incident-response-runbook.md`
-   - Note: HA failover is not a breach — document it as an infrastructure event
+   - Note: HA failover is not a breach; document it as an infrastructure event
 
 ---
 
@@ -70,7 +70,7 @@ This runbook provides executable step-by-step procedures for each recovery scena
 ### Before You Start
 
 - Confirm the target restore time (the moment *before* the corruption/deletion occurred)
-- PITR restores to a **new instance** — the original instance continues running until you cut over
+- PITR restores to a **new instance**: the original instance continues running until you cut over
 - You will need to update Cloud Function connection strings after the restore
 
 ### Steps
@@ -141,7 +141,7 @@ This runbook provides executable step-by-step procedures for each recovery scena
 
 8. **Decommission the damaged original instance**
    - Only after step 7 is confirmed healthy
-   - Do not delete — disable the instance first and retain for 7 days before deletion
+   - Do not delete. Disable the instance first and retain for 7 days before deletion.
    ```bash
    gcloud sql instances patch ORIGINAL_INSTANCE --activation-policy=NEVER
    ```
@@ -155,7 +155,7 @@ This runbook provides executable step-by-step procedures for each recovery scena
 
 ## Scenario 3: Full Backup Restore (Region Outage or Instance Loss)
 
-**When:** Cloud SQL instance is unrecoverable — PITR is unavailable or a full region is down.
+**When:** Cloud SQL instance is unrecoverable (PITR is unavailable or a full region is down).
 
 **RTO target:** < 4 hours | **RPO target:** < 24 hours (last daily backup)
 
@@ -182,7 +182,7 @@ This runbook provides executable step-by-step procedures for each recovery scena
      --project=PROJECT_ID
    ```
 
-3. **Reconfigure the instance** — repeat steps 5–8 from Scenario 2
+3. **Reconfigure the instance**: repeat steps 5–8 from Scenario 2
 
 4. **Update VPC Connector** if restoring to a different region
    - Create a new VPC Connector in the same region as the restored instance
@@ -203,7 +203,7 @@ This runbook provides executable step-by-step procedures for each recovery scena
 
 ### Steps
 
-1. **Identify scope** — which collections are affected and what is the damage timestamp
+1. **Identify scope**: which collections are affected and what is the damage timestamp
 
 2. **Restore from Firestore managed export**
    ```
@@ -218,7 +218,7 @@ This runbook provides executable step-by-step procedures for each recovery scena
      --collection-ids=COLLECTION_NAME \
      --project=PROJECT_ID
    ```
-   > **Note:** Firestore import merges data — it does not wipe existing documents first. If you need a clean restore, contact GCP Support for managed restoration assistance.
+   > **Note:** Firestore import merges data; it does not wipe existing documents first. If you need a clean restore, contact GCP Support for managed restoration assistance.
 
 3. **Verify collection document counts and spot-check records**
 
@@ -228,11 +228,11 @@ This runbook provides executable step-by-step procedures for each recovery scena
 
 ## Scenario 5: Firebase Auth Outage
 
-**When:** Firebase Auth is unavailable — staff cannot log in.
+**When:** Firebase Auth is unavailable (staff cannot log in).
 
 **RTO target:** N/A (vendor-managed) | **RPO target:** N/A
 
-Firebase Auth availability is Google's responsibility under the BAA. Your organization cannot self-recover from a Firebase Auth outage — this is a vendor incident.
+Firebase Auth availability is Google's responsibility under the BAA. Your organization cannot self-recover from a Firebase Auth outage; this is a vendor incident.
 
 ### Steps
 
@@ -245,11 +245,11 @@ Firebase Auth availability is Google's responsibility under the BAA. Your organi
    - Identify which workforce members have authority to access backup systems
    - Ensure paper-based emergency records are available for critical client information
 
-3. **Communicate status** — notify staff that login is unavailable and provide an estimated resolution time from the Firebase Status Page
+3. **Communicate status**: notify staff that login is unavailable and provide an estimated resolution time from the Firebase Status Page
 
-4. **When service is restored** — verify all staff can authenticate; confirm no sessions were invalidated unexpectedly
+4. **When service is restored**: verify all staff can authenticate; confirm no sessions were invalidated unexpectedly
 
-5. **Document the outage** — log the start time, end time, and any client service impact
+5. **Document the outage**: log the start time, end time, and any client service impact
 
 ---
 
@@ -297,7 +297,7 @@ HIPAA requires testing disaster recovery procedures at least annually. Document 
 ### Test Scope (minimum)
 - [ ] PITR restore to staging environment from most recent backup
 - [ ] Verify data integrity using record count and spot-check queries
-- [ ] Time the full restore process — compare against RTO target
+- [ ] Time the full restore process: compare against RTO target
 - [ ] Verify Cloud Functions connect to the restored instance
 - [ ] Verify audit logs flow correctly from the restored instance
 - [ ] Firestore import test on staging
@@ -317,7 +317,7 @@ HIPAA requires testing disaster recovery procedures at least annually. Document 
 
 ## Related Documents
 
-- `docs/11-administrative-policies.md` §7 — Contingency plan policy and RTO/RPO targets
-- `checklists/incident-response-runbook.md` — Incident classification and breach determination
-- `checklists/gcp-configuration.md` — Backup configuration verification
-- `docs/08-risk-analysis-template.md` — DR risks in the risk analysis
+- `docs/11-administrative-policies.md` §7: Contingency plan policy and RTO/RPO targets
+- `checklists/incident-response-runbook.md`: Incident classification and breach determination
+- `checklists/gcp-configuration.md`: Backup configuration verification
+- `docs/08-risk-analysis-template.md`: DR risks in the risk analysis

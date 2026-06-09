@@ -7,7 +7,7 @@
 
 ---
 
-> **Reference**: 45 CFR § 164.308 — Administrative Safeguards
+> **Reference**: 45 CFR § 164.308 (Administrative Safeguards)
 > Administrative safeguards are the policies and procedures that govern how the organization manages ePHI security at the people and process level.
 
 ---
@@ -214,7 +214,7 @@ The Security Officer shall issue security reminders at least quarterly, covering
 
 A security incident is any attempted or successful unauthorized access, use, disclosure, modification, or destruction of ePHI or ePHI systems.
 
-All workforce members must report suspected incidents to the Security Officer **immediately** — no exceptions.
+All workforce members must report suspected incidents to the Security Officer **immediately**. No exceptions.
 
 **Security Officer contact for incidents**:
 
@@ -328,7 +328,7 @@ Maintain a current inventory of all BAAs:
 
 ## Policy 10: Service Availability
 
-**Reference**: 45 CFR § 164.308(a)(7) (Contingency Plan — operational complement); internal operational policy
+**Reference**: 45 CFR § 164.308(a)(7) (Contingency Plan, operational complement); internal operational policy
 
 ### 10.1 Purpose
 
@@ -341,7 +341,7 @@ These are internal operational targets, not contractual guarantees. Actual avail
 | System | Monthly Uptime Target | Allowable Downtime / Month |
 |--------|-----------------------|---------------------------|
 | Cloud Functions + Firebase Auth (application layer) | 99.0% | ~7.3 hours |
-| Cloud SQL — PHI data store (HA enabled) | 99.5% | ~3.6 hours |
+| Cloud SQL: PHI data store (HA enabled) | 99.5% | ~3.6 hours |
 | Email / push notifications | Best effort | No formal target |
 
 ### 10.3 Measurement
@@ -386,10 +386,10 @@ Name (printed): _______________________________________________ Title: _________
 
 ## Related Documents
 
-- `docs/05-rbac-design.md` — Access control implementation
-- `docs/08-risk-analysis-template.md` — Risk analysis methodology
-- `docs/09-breach-notification-procedure.md` — Incident response and notification
-- `docs/10-physical-safeguards.md` — Physical security policies
-- `docs/12-staff-training-program.md` — Training program details
-- `checklists/incident-response-runbook.md` — Operational incident response
-- `templates/risk-register.md` — Risk tracking
+- `docs/05-rbac-design.md`: Access control implementation
+- `docs/08-risk-analysis-template.md`: Risk analysis methodology
+- `docs/09-breach-notification-procedure.md`: Incident response and notification
+- `docs/10-physical-safeguards.md`: Physical security policies
+- `docs/12-staff-training-program.md`: Training program details
+- `checklists/incident-response-runbook.md`: Operational incident response
+- `templates/risk-register.md`: Risk tracking

@@ -7,7 +7,7 @@
 
 ---
 
-> **Reference**: 45 CFR § 164.308(a)(1) — Required implementation specification under the Administrative Safeguards of the Security Rule.
+> **Reference**: 45 CFR § 164.308(a)(1) (required implementation specification under the Administrative Safeguards of the Security Rule)
 
 HIPAA does not prescribe a specific risk analysis methodology, but requires that it be accurate, thorough, and documented. This template follows NIST SP 800-30 guidance, which HHS recognizes as an acceptable framework.
 
@@ -45,7 +45,7 @@ List all systems that create, receive, maintain, or transmit ePHI:
 | Cloud Storage | Document storage | Intake forms, scanned records | GCP us-central1 |
 | Firestore | Operational metadata | Client IDs, assignment data | GCP us-central1 |
 | Cloud Functions | Data processing layer | Transient ePHI in transit | GCP us-central1 |
-| Firebase Auth | Identity management | No PHI — auth tokens only | GCP us-central1 |
+| Firebase Auth | Identity management | No PHI: auth tokens only | GCP us-central1 |
 | Staff workstations | Data access terminals | Screen display of ePHI | On-premises |
 | Staff mobile devices | Field access | Limited ePHI via app | Off-premises |
 | _(add rows as needed)_ | | | |
@@ -110,11 +110,11 @@ For each system in scope, identify relevant vulnerabilities:
 
 | ID | Vulnerability | System Affected | Current Control |
 |----|--------------|-----------------|-----------------|
-| V-01 | No MFA enforced for all staff accounts | Firebase Auth | MFA enabled — verify enforcement |
+| V-01 | No MFA enforced for all staff accounts | Firebase Auth | MFA enabled: verify enforcement |
 | V-02 | Overly permissive IAM roles | GCP IAM | Least-privilege review needed |
 | V-03 | Audit logs not reviewed regularly | Cloud Audit Logs | Automated alerts configured |
-| V-04 | No endpoint encryption on staff laptops | Workstations | Policy required — see doc 10 |
-| V-05 | Secrets hard-coded in old code branches | Source code | Secret Manager in use — verify |
+| V-04 | No endpoint encryption on staff laptops | Workstations | Policy required: see doc 10 |
+| V-05 | Secrets hard-coded in old code branches | Source code | Secret Manager in use: verify |
 | V-06 | No data loss prevention (DLP) scanning | All services | GCP DLP not yet configured |
 | V-07 | Staff not trained on phishing recognition | Human | Training program required |
 | V-08 | No formal media sanitization process | Physical media | Procedure required |
@@ -215,7 +215,7 @@ Signature: _______________________________________________ Date: _______________
 
 ## Related Documents
 
-- `templates/risk-register.md` — Detailed risk tracking
-- `docs/09-breach-notification-procedure.md` — Response when a risk event occurs
-- `checklists/pre-launch-audit.md` — Technical verification of controls
-- `docs/11-administrative-policies.md` — Workforce and access policies
+- `templates/risk-register.md`: Detailed risk tracking
+- `docs/09-breach-notification-procedure.md`: Response when a risk event occurs
+- `checklists/pre-launch-audit.md`: Technical verification of controls
+- `docs/11-administrative-policies.md`: Workforce and access policies

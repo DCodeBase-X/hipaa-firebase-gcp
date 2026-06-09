@@ -7,8 +7,8 @@
 
 ---
 
-> **Reference**: 45 CFR § 164.308(a)(5) — Security Awareness and Training (Administrative Safeguard)
-> 45 CFR § 164.530(b) — Training (Privacy Rule)
+> **Reference**: 45 CFR § 164.308(a)(5) (Security Awareness and Training, Administrative Safeguard)
+> 45 CFR § 164.530(b) (Training, Privacy Rule)
 
 HIPAA requires training for all workforce members whose work involves PHI. Training must occur at hire and periodically thereafter. This document provides a complete training curriculum, delivery guidance, and tracking system.
 
@@ -30,7 +30,7 @@ HIPAA requires training for all workforce members whose work involves PHI. Train
 
 ---
 
-## Module 1: HIPAA Fundamentals (All Staff — 60 minutes)
+## Module 1: HIPAA Fundamentals (All Staff: 60 minutes)
 
 ### Learning Objectives
 
@@ -75,7 +75,7 @@ After completing this module, the workforce member will be able to:
 
 ---
 
-## Module 2: Security Practices (All Staff — 45 minutes)
+## Module 2: Security Practices (All Staff: 45 minutes)
 
 ### Learning Objectives
 
@@ -92,12 +92,12 @@ After completing this module, the workforce member will be able to:
 - Never reuse passwords across systems
 - Use of a password manager (recommended tools)
 - Multi-factor authentication: what it is, how to set it up, why it's required
-- Never share passwords — not even with the Security Officer
+- Never share passwords: not even with the Security Officer
 
 **2.2 Phishing and Social Engineering**
 - How to identify phishing emails (urgency, suspicious links, unexpected attachments)
 - Vishing (voice phishing) and pretexting tactics
-- What to do if you receive a suspicious email: do not click — forward to Security Officer
+- What to do if you receive a suspicious email: do not click: forward to Security Officer
 - Real examples relevant to healthcare nonprofits
 
 **2.3 Device and Workstation Security**
@@ -115,7 +115,7 @@ After completing this module, the workforce member will be able to:
 
 **2.5 Incident Reporting**
 - What to report: suspicious emails, lost devices, unexpected system behavior, suspected unauthorized access
-- When to report: immediately — same day
+- When to report: immediately: same day
 - Who to report to: Security Officer (contact info on file)
 - What happens after you report (brief overview of incident response)
 
@@ -133,7 +133,7 @@ For staff with direct access to health records, mental health data, SUD records,
 - Your specific access role and what data you can access
 - The principle of clinical staff assignment: you only access records for clients assigned to you
 - Case notes and documentation best practices (what to record, what not to record)
-- Handling especially sensitive PHI: mental health, SUD, HIV status — additional protections apply
+- Handling especially sensitive PHI: mental health, SUD, HIV status: additional protections apply
 - Disclosure requirements and restrictions (e.g., 42 CFR Part 2 for SUD records)
 - Telehealth and remote session security
 
@@ -144,7 +144,7 @@ For staff with access to system configuration, code, databases, or infrastructur
 **Topics**:
 - Our three-layer architecture and data flow (see `docs/02-three-layer-architecture.md`)
 - What data lives where: Cloud SQL (PHI only), Firestore (operational), Layer 1 (no PHI)
-- Firebase services that are NOT covered by Google's BAA — never store PHI there
+- Firebase services that are NOT covered by Google's BAA: never store PHI there
 - Firestore Security Rules: deny-all default, role-based access patterns
 - Cloud Functions: authentication, role validation, no PHI in logs
 - Secret Manager: all credentials must live here; never hard-code secrets
@@ -166,7 +166,7 @@ For staff with access to client operational data but not direct PHI.
 
 ---
 
-## Module 4: Breach Recognition and Reporting (All Staff — 30 minutes)
+## Module 4: Breach Recognition and Reporting (All Staff: 30 minutes)
 
 ### Learning Objectives
 
@@ -186,7 +186,7 @@ After completing this module, the workforce member will be able to:
 1. Stop the potential breach if possible (close the browser, lock the device, stop the email)
 2. Do not delete anything
 3. Do not attempt to investigate or fix it yourself
-4. Contact the Security Officer immediately — phone or in-person
+4. Contact the Security Officer immediately: phone or in-person
 5. Document what you observed: time, what you saw, what you did
 
 **4.3 What Happens Next**
@@ -226,10 +226,10 @@ After completing this module, the workforce member will be able to:
 
 I, _______________________________________________, confirm that I have completed the following HIPAA training modules and understand my responsibilities under HIPAA:
 
-- [ ] Module 1: HIPAA Fundamentals — Completed: _______________ Score: ___/10
-- [ ] Module 2: Security Practices — Completed: _______________ Score: ___/5
-- [ ] Module 3 (role-specific): _______________ — Completed: _______________
-- [ ] Module 4: Breach Recognition — Completed: _______________ Score: ___/5
+- [ ] Module 1: HIPAA Fundamentals: Completed: _______________ Score: ___/10
+- [ ] Module 2: Security Practices: Completed: _______________ Score: ___/5
+- [ ] Module 3 (role-specific): _______________: Completed: _______________
+- [ ] Module 4: Breach Recognition: Completed: _______________ Score: ___/5
 
 I understand that:
 - I am responsible for protecting PHI in all forms (electronic and paper)
@@ -269,7 +269,7 @@ Annual refresher training must be completed by December 31 of each year. Topics 
 
 ## Related Documents
 
-- `docs/11-administrative-policies.md` — Sanction policy and workforce security
-- `docs/10-physical-safeguards.md` — Device and workstation policies reviewed in training
-- `docs/09-breach-notification-procedure.md` — Breach response covered in Module 4
-- `docs/05-rbac-design.md` — Role definitions referenced in Module 3
+- `docs/11-administrative-policies.md`: Sanction policy and workforce security
+- `docs/10-physical-safeguards.md`: Device and workstation policies reviewed in training
+- `docs/09-breach-notification-procedure.md`: Breach response covered in Module 4
+- `docs/05-rbac-design.md`: Role definitions referenced in Module 3

@@ -1,6 +1,6 @@
 # Nonprofit Cost Guide
 
-The typical HIPAA architecture guides assume enterprise budgets. This page gives real cost estimates for the Firebase/GCP stack at nonprofit scale — the kind of organization that has 10–150 clients, 5–30 staff, and a technology budget measured in thousands, not hundreds of thousands.
+The typical HIPAA architecture guides assume enterprise budgets. This page gives real cost estimates for the Firebase/GCP stack at nonprofit scale: the kind of organization that has 10–150 clients, 5–30 staff, and a technology budget measured in thousands, not hundreds of thousands.
 
 ---
 
@@ -15,7 +15,7 @@ A production-ready, HIPAA-compliant Firebase/GCP system for a small-to-mid nonpr
 | **Established** | $400–$900/mo | 100–200 clients, 30–75 staff |
 | **Scaling** | $900–$2,500/mo | 200+ clients, 75+ staff, multi-location |
 
-These do not include Salesforce, Hostinger, Cloudflare, or email — those are separate line items.
+These do not include Salesforce, Hostinger, Cloudflare, or email; those are separate line items.
 
 ---
 
@@ -27,7 +27,7 @@ These do not include Salesforce, Hostinger, Cloudflare, or email — those are s
 - Free for up to 10,000 monthly active users on the Blaze plan
 - Cost: **$0** for virtually all nonprofits
 
-> **Important:** You must be on the **Blaze (pay-as-you-go)** plan to sign the BAA and use HIPAA-eligible services. You cannot use the free Spark plan for HIPAA workloads — even if your usage would be within the free tier limits.
+> **Important:** You must be on the **Blaze (pay-as-you-go)** plan to sign the BAA and use HIPAA-eligible services. You cannot use the free Spark plan for HIPAA workloads, even if your usage would be within the free tier limits.
 
 **Cloud Firestore**
 - First 1GB storage: free
@@ -135,7 +135,7 @@ Eligible nonprofits receive $20,000/year in Google Cloud credits. Apply at [goog
 Salesforce donates 10 licenses of NPSP to eligible 501(c)(3)s through the Power of Us program. This is a $25,000+/year value. Apply at [salesforce.org/power-of-us](https://www.salesforce.org/power-of-us/).
 
 **3. Firebase free tier counts on Blaze**
-The Blaze plan still includes the same free tiers as Spark — you're only billed for usage beyond those limits. Being on Blaze (required for HIPAA BAA) doesn't mean you lose the free tier.
+The Blaze plan still includes the same free tiers as Spark; you're only billed for usage beyond those limits. Being on Blaze (required for HIPAA BAA) doesn't mean you lose the free tier.
 
 **4. Start small on Cloud SQL**
 `db-f1-micro` is genuinely sufficient for a startup nonprofit. Upgrade as you actually hit performance limits rather than pre-provisioning for theoretical scale.

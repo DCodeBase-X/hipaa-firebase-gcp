@@ -27,7 +27,7 @@ Classify the incident before beginning response. Severity determines response ti
 
 | Severity | Definition | Examples | Response SLA |
 |----------|------------|----------|-------------|
-| **P1 – Critical** | Active, ongoing breach of ePHI or complete system compromise | Ransomware, active unauthorized access with PHI exfiltration, database exposed publicly | Immediate — all hands |
+| **P1 – Critical** | Active, ongoing breach of ePHI or complete system compromise | Ransomware, active unauthorized access with PHI exfiltration, database exposed publicly | Immediate: all hands |
 | **P2 – High** | Confirmed breach of ePHI, contained but serious | Lost device with PHI, PHI emailed to wrong recipient, misconfigured security rule | < 2 hours |
 | **P3 – Medium** | Suspected breach under investigation, or significant policy violation | Suspicious login, unexpected system change, report of unauthorized access | < 24 hours |
 | **P4 – Low** | Security policy violation without apparent PHI exposure | Password shared, screen not locked, minor misconfiguration with no exposure | < 72 hours |
@@ -38,7 +38,7 @@ Classify the incident before beginning response. Severity determines response ti
 
 **Trigger**: Any staff member reports a suspected incident, or an automated alert fires.
 
-### Step 1.1 — Receive and Log the Report
+### Step 1.1: Receive and Log the Report
 
 - [ ] Record the date and time the incident was reported
 - [ ] Record the name and role of the person reporting
@@ -55,13 +55,13 @@ Classify the incident before beginning response. Severity determines response ti
 | Systems Mentioned | |
 | Assigned To (Security Officer) | |
 
-### Step 1.2 — Classify Severity
+### Step 1.2: Classify Severity
 
 Based on the report, assign initial severity (P1–P4). This may change as investigation proceeds.
 
 Initial Severity: _______ Assigned by: _______________________________
 
-### Step 1.3 — Notify Based on Severity
+### Step 1.3: Notify Based on Severity
 
 | Severity | Notify Immediately |
 |----------|--------------------|
@@ -76,13 +76,13 @@ Initial Severity: _______ Assigned by: _______________________________
 
 **Goal**: Stop ongoing harm. Do not allow further PHI exposure.
 
-### Step 2.1 — Identify the Affected System(s)
+### Step 2.1: Identify the Affected System(s)
 
 - [ ] Which system is involved? (Firebase Auth / Cloud Functions / Firestore / Cloud SQL / Cloud Storage / Workstation / Other)
 - [ ] Is the threat active or historical?
 - [ ] Is ePHI actively being accessed or exfiltrated right now?
 
-### Step 2.2 — Containment Actions by Incident Type
+### Step 2.2: Containment Actions by Incident Type
 
 #### Compromised User Account
 
@@ -136,7 +136,7 @@ gcloud projects remove-iam-policy-binding PROJECT_ID \
 - [ ] Isolate affected workstations immediately (disconnect from network)
 - [ ] Do NOT pay ransom without legal and executive approval
 - [ ] Contact GCP Support if cloud systems are affected
-- [ ] Initiate disaster recovery procedures (`docs/11-administrative-policies.md` § 7)
+- [ ] Initiate disaster recovery procedures (`checklists/disaster-recovery-runbook.md`)
 - [ ] Preserve all forensic evidence before any cleanup
 
 #### PHI Sent to Wrong Recipient (Email/Fax)
@@ -160,7 +160,7 @@ gcloud projects remove-iam-policy-binding PROJECT_ID \
 
 **Goal**: Determine the full scope of what happened.
 
-### Step 3.1 — Preserve Evidence
+### Step 3.1: Preserve Evidence
 
 - [ ] Export relevant Cloud Audit Logs before they age out (default retention: 400 days for Admin Activity, 30 days for Data Access)
   ```bash
@@ -171,7 +171,7 @@ gcloud projects remove-iam-policy-binding PROJECT_ID \
 - [ ] Preserve any local device forensics before wiping
 - [ ] Do not modify or delete logs
 
-### Step 3.2 — Build an Incident Timeline
+### Step 3.2: Build an Incident Timeline
 
 Document every relevant event with timestamps:
 
@@ -184,7 +184,7 @@ Document every relevant event with timestamps:
 | | Containment completed | |
 | | Investigation completed | |
 
-### Step 3.3 — Determine Scope of PHI Exposure
+### Step 3.3: Determine Scope of PHI Exposure
 
 Answer the following:
 
@@ -238,14 +238,14 @@ Notification status:
 
 ## Phase 6: Recovery and Remediation
 
-### Step 6.1 — Restore Normal Operations
+### Step 6.1: Restore Normal Operations
 
 - [ ] Verify containment is complete before restoring access
 - [ ] Test affected systems before returning to production use
 - [ ] Restore from backup if data was corrupted or lost (document restore point used)
 - [ ] Verify audit logs are flowing correctly post-recovery
 
-### Step 6.2 — Corrective Action Plan
+### Step 6.2: Corrective Action Plan
 
 Develop and assign corrective actions to prevent recurrence:
 
@@ -253,7 +253,7 @@ Develop and assign corrective actions to prevent recurrence:
 |---------|------------------|-------|-------------|-----------|
 | | | | | |
 
-### Step 6.3 — Update Risk Analysis
+### Step 6.3: Update Risk Analysis
 
 - [ ] Add this incident as a threat event to the risk register (`templates/risk-register.md`)
 - [ ] Update likelihood scores for related risks
@@ -313,8 +313,8 @@ All documentation retained for 6 years from date of closure.
 
 ## Related Documents
 
-- `docs/09-breach-notification-procedure.md` — Notification requirements and templates
-- `docs/11-administrative-policies.md` — Sanction policy, roles, contingency plan
-- `docs/08-risk-analysis-template.md` — Update after incidents
-- `templates/risk-register.md` — Add new risks identified
-- `templates/breach-notification-letter.md` — Individual notification letter
+- `docs/09-breach-notification-procedure.md`: Notification requirements and templates
+- `docs/11-administrative-policies.md`: Sanction policy, roles, contingency plan
+- `docs/08-risk-analysis-template.md`: Update after incidents
+- `templates/risk-register.md`: Add new risks identified
+- `templates/breach-notification-letter.md`: Individual notification letter

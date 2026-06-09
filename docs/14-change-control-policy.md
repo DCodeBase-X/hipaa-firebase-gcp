@@ -1,6 +1,6 @@
 # Change Control Policy
 
-> **Reference**: 45 CFR § 164.308(a)(1) — Security Management Process
+> **Reference**: 45 CFR § 164.308(a)(1) (Security Management Process)
 > Changes to PHI systems, access control logic, or BAA-covered services must be reviewed and approved before reaching production. This policy ensures the risk analysis stays current after every significant system change.
 
 **Version**: 1.0
@@ -13,7 +13,7 @@
 
 HIPAA requires that the organization's risk analysis be updated after any significant system change (45 CFR § 164.308(a)(1)). Without a defined change control process, the risk analysis becomes stale the moment a developer merges a pull request.
 
-This policy establishes a lightweight process appropriate for a small nonprofit (~12 staff). The goal is not bureaucratic overhead — it is a short, reliable loop that ensures:
+This policy establishes a lightweight process appropriate for a small nonprofit (~12 staff). The goal is not bureaucratic overhead; it is a short, reliable loop that ensures:
 
 1. Changes touching PHI systems are reviewed before production deployment
 2. The Security Officer approves high-risk changes
@@ -39,7 +39,7 @@ Not every code change is in scope. The change control process applies whenever a
 
 ### Out of Scope
 
-Routine changes that do not affect PHI systems, access control, or BAA-covered services — such as updates to the public-facing website, non-PHI frontend code, or documentation — do not require this process. When in doubt, ask the Security Officer.
+Routine changes that do not affect PHI systems, access control, or BAA-covered services (such as updates to the public-facing website, non-PHI frontend code, or documentation) do not require this process. When in doubt, ask the Security Officer.
 
 ---
 
@@ -49,8 +49,8 @@ Changes are classified into two tiers based on risk level.
 
 | Tier | Description | Required Steps |
 |---|---|---|
-| **Tier 1 — Standard** | In-scope change (see above) that follows the normal code promotion path | Developer review → staging validation → Security Officer sign-off → production deploy → change log entry → risk register check |
-| **Tier 2 — Emergency** | Critical security patch that cannot wait for staging validation | Security Officer verbal approval → expedited deploy → written follow-up within 24 hours → change log entry → risk register check |
+| **Tier 1: Standard** | In-scope change (see above) that follows the normal code promotion path | Developer review → staging validation → Security Officer sign-off → production deploy → change log entry → risk register check |
+| **Tier 2: Emergency** | Critical security patch that cannot wait for staging validation | Security Officer verbal approval → expedited deploy → written follow-up within 24 hours → change log entry → risk register check |
 
 All Tier 1 and Tier 2 changes must be logged in the change log (see Section 4) and must trigger a risk register evaluation (see Section 5).
 
@@ -77,7 +77,7 @@ Before submitting a change for review, the developer must:
 
 - [ ] PR is merged to the staging branch and deployed to the staging environment
 - [ ] Automated CI/CD tests run against staging (see `docs/13-environment-separation.md` §CI/CD Environment Gates)
-- [ ] Functional validation is performed against synthetic data — no production PHI is used in staging
+- [ ] Functional validation is performed against synthetic data: no production PHI is used in staging
 - [ ] If tests fail, the change does not advance to production
 
 ### Step 4: Security Officer Sign-Off
@@ -110,7 +110,7 @@ The Security Officer must review and approve the change before it deploys to pro
 
 ## Tier 2: Emergency Change Procedure
 
-An emergency change applies when a critical security vulnerability requires an immediate fix to production — for example, a zero-day exploit in a dependency that grants unauthorized PHI access.
+An emergency change applies when a critical security vulnerability requires an immediate fix to production, for example a zero-day exploit in a dependency that grants unauthorized PHI access.
 
 The emergency procedure exists to prevent harm while maintaining accountability. It is not a general-purpose shortcut for schedule pressure.
 
@@ -126,11 +126,11 @@ A change qualifies as an emergency only if **all three** of the following are tr
 
 1. **Verbal Security Officer approval**: The developer contacts the Security Officer directly (phone or in-person) and explains the situation. The Security Officer gives verbal approval to proceed.
 
-2. **Expedited staging check**: Even under emergency conditions, deploy to staging and run automated tests if the timeline permits — even 15 minutes of staging validation reduces risk. If staging cannot be used, the developer documents why.
+2. **Expedited staging check**: Even under emergency conditions, deploy to staging and run automated tests if the timeline permits: even 15 minutes of staging validation reduces risk. If staging cannot be used, the developer documents why.
 
 3. **Production deployment**: Proceed with the fix.
 
-4. **Written follow-up within 24 hours**: The Security Officer documents the emergency approval in writing — an email to the organization's compliance file is sufficient. This written record must include:
+4. **Written follow-up within 24 hours**: The Security Officer documents the emergency approval in writing: an email to the organization's compliance file is sufficient. This written record must include:
    - What the emergency was
    - Why normal process was bypassed
    - Who approved it and when
@@ -147,9 +147,9 @@ A change qualifies as an emergency only if **all three** of the following are tr
 
 ## Change Log
 
-All in-scope production changes — whether Tier 1 or Tier 2 — must be recorded in the change log. The log is a lightweight written record, not a formal ITSM ticket system. The change log is the organization's primary evidence of compliance with the risk analysis update obligation under 45 CFR § 164.308(a)(1) and will be requested during HHS Office for Civil Rights audits or investigations.
+All in-scope production changes, whether Tier 1 or Tier 2, must be recorded in the change log. The log is a lightweight written record, not a formal ITSM ticket system. The change log is the organization's primary evidence of compliance with the risk analysis update obligation under 45 CFR § 164.308(a)(1) and will be requested during HHS Office for Civil Rights audits or investigations.
 
-**Where the log lives**: `[ORGANIZATION TO SPECIFY — e.g., a shared document, a dedicated GitHub repository page, or a designated folder in Google Drive]`
+**Where the log lives**: `[ORGANIZATION TO SPECIFY, e.g., a shared document, a dedicated GitHub repository page, or a designated folder in Google Drive]`
 
 ### Change Log Entry Format
 
@@ -165,7 +165,7 @@ Each entry must capture the following fields:
 | **Developer** | Who implemented the change |
 | **Approver** | Security Officer name and approval date |
 | **PR / Commit Reference** | Link to the pull request or commit hash |
-| **Risk Register Updated** | Yes / No / Not Required — with date if updated |
+| **Risk Register Updated** | Yes / No / Not Required: with date if updated |
 | **Staging Bypass** | If Tier 2: reason staging was partially or fully bypassed |
 
 ### Example Entry
@@ -180,7 +180,7 @@ Each entry must capture the following fields:
 | Developer | [Developer Name] |
 | Approver | [Security Officer Name], approved 2025-03-13 |
 | PR / Commit Reference | github.com/your-org/repo/pull/47 |
-| Risk Register Updated | No — change determined not to introduce new risks |
+| Risk Register Updated | No: change determined not to introduce new risks |
 | Staging Bypass | N/A |
 
 ---
@@ -213,7 +213,7 @@ For each in-scope change, the evaluator considers:
 
 | Evaluation Outcome | Action Required |
 |---|---|
-| No new risks identified | Document in change log: "Risk register reviewed — no new risks identified." No further action. |
+| No new risks identified | Document in change log: "Risk register reviewed: no new risks identified." No further action. |
 | New risk identified | Add a new entry to `templates/risk-register.md` using the standard risk ID format (R-YYYY-###). Assign a risk owner and response. |
 | Existing risk closed by this change | Update the existing risk register entry to reflect the changed status. |
 | Existing risk modified (higher or lower) by this change | Update the risk score and response in the existing entry. Document the change that triggered the update. |
@@ -243,8 +243,8 @@ All change log entries and associated approval documentation must be retained fo
 
 ## Related Documents
 
-- `docs/13-environment-separation.md` — Three-environment strategy and CI/CD gate structure that technically enforces this policy
-- `templates/risk-register.md` — Living risk register; updated after every in-scope change
-- `docs/08-risk-analysis-template.md` — NIST-aligned risk analysis methodology
-- `docs/11-administrative-policies.md` — Policy 8.1 requires risk analysis after significant changes; §1.4 defines sanctions for policy violations
-- `docs/05-rbac-design.md` — RBAC role definitions referenced during Security Rules peer review
+- `docs/13-environment-separation.md`: Three-environment strategy and CI/CD gate structure that technically enforces this policy
+- `templates/risk-register.md`: Living risk register; updated after every in-scope change
+- `docs/08-risk-analysis-template.md`: NIST-aligned risk analysis methodology
+- `docs/11-administrative-policies.md`: Policy 8.1 requires risk analysis after significant changes; §1.4 defines sanctions for policy violations
+- `docs/05-rbac-design.md`: RBAC role definitions referenced during Security Rules peer review

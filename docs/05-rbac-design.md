@@ -1,6 +1,6 @@
 # Role-Based Access Control Design
 
-HIPAA's minimum necessary standard requires that every person accessing PHI can only see what they need to do their job — nothing more. RBAC (Role-Based Access Control) is how you enforce this technically across Firebase Auth, Firestore Security Rules, and Cloud Functions.
+HIPAA's minimum necessary standard requires that every person accessing PHI can only see what they need to do their job, nothing more. RBAC (Role-Based Access Control) is how you enforce this technically across Firebase Auth, Firestore Security Rules, and Cloud Functions.
 
  
 
@@ -27,7 +27,7 @@ flowchart TD
     ADM -->|"Can manage"| VOL
 ```
 
-> **Note on service accounts:** Cloud Functions access Layer 3 (Cloud SQL, Cloud Storage) using GCP IAM service accounts — not Firebase custom claims. Service account permissions are governed at the GCP IAM level, separate from this RBAC model.
+> **Note on service accounts:** Cloud Functions access Layer 3 (Cloud SQL, Cloud Storage) using GCP IAM service accounts, not Firebase custom claims. Service account permissions are governed at the GCP IAM level, separate from this RBAC model.
 
 > **Note on `family_member`:** This role is defined for future implementation. It requires a client-signed authorization record before any access is granted. It must not be assigned until the authorization workflow is implemented and the Firestore rules below are extended to enforce it.
 
@@ -53,9 +53,9 @@ flowchart TD
 
 Roles are stored as custom claims on the Firebase user record. Claims are included in the ID token and available in Firestore Security Rules and Cloud Functions without an additional database query.
 
-> **JWT size limit:** Firebase custom claims are limited to 1000 bytes. Do not store `assignedClients` arrays in the JWT — this will silently fail for staff assigned to more than ~30 clients. Client-staff assignments are stored in a Firestore `staff_assignments` collection and validated server-side in Cloud Functions.
+> **JWT size limit:** Firebase custom claims are limited to 1000 bytes. Do not store `assignedClients` arrays in the JWT. This will silently fail for staff assigned to more than approximately 30 clients. Client-staff assignments are stored in a Firestore `staff_assignments` collection and validated server-side in Cloud Functions.
 
-**Assigning a role (Cloud Function — admin only):**
+**Assigning a role (Cloud Function, admin only):**
 
 ```javascript
 const admin = require('firebase-admin');
@@ -109,7 +109,7 @@ exports.assignUserRole = functions.https.onCall(async (data, context) => {
 });
 ```
 
-**Revoking access at termination (Cloud Function — admin only):**
+**Revoking access at termination (Cloud Function, admin only):**
 
 ```javascript
 exports.revokeUserAccess = functions.https.onCall(async (data, context) => {
@@ -174,7 +174,7 @@ async function getUserRole() {
 
 ## Implementation: Firestore Security Rules
 
-Firestore Security Rules enforce access at the database layer — a defense-in-depth measure even if Cloud Function logic contains an error.
+Firestore Security Rules enforce access at the database layer, providing a defense-in-depth measure even if Cloud Function logic contains an error.
 
 ```javascript
 rules_version = '2';
@@ -279,7 +279,7 @@ service cloud.firestore {
 
 ## Implementation: Cloud Function PHI Access Control
 
-Every Cloud Function that touches PHI must follow this validation pattern. The steps must execute in order — no data operation may occur before all validations pass.
+Every Cloud Function that touches PHI must follow this validation pattern. The steps must execute in order; no data operation may occur before all validations pass.
 
 ```javascript
 const admin = require('firebase-admin');
@@ -367,7 +367,7 @@ exports.getClientRecord = functions.https.onCall(async (data, context) => {
 
 ## MFA Enforcement by Role
 
-MFA enforcement must be validated **server-side** inside `validatePhiAccess` (shown above). Client-side redirection to an enrollment page is a UX convenience only — it is bypassable by any caller that invokes the Cloud Function directly without going through the client application.
+MFA enforcement must be validated **server-side** inside `validatePhiAccess` (shown above). Client-side redirection to an enrollment page is a UX convenience only; it is bypassable by any caller that invokes the Cloud Function directly without going through the client application.
 
 ```javascript
 // Client-side MFA check — UX only, not a security control
@@ -384,7 +384,7 @@ export async function enforceRoleMfa(user, role) {
 }
 ```
 
-The server-side MFA check in `validatePhiAccess` is the authoritative enforcement point. The client-side check above improves user experience by surfacing the enrollment requirement early — it is not a substitute for server-side validation.
+The server-side MFA check in `validatePhiAccess` is the authoritative enforcement point. The client-side check above improves user experience by surfacing the enrollment requirement early; it is not a substitute for server-side validation.
 
  
 

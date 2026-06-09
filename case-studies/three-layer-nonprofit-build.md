@@ -5,7 +5,7 @@
 **Programs:** 10 integrated service areas including transitional housing, reentry coordination, vocational training, family services, and mobile ministry
 **Projected capacity:** 100–150 residents
 
-This case study walks through the end-to-end architectural decisions made for a real nonprofit implementation — from the initial technology assessment through final system design. Organization and individual details have been generalized.
+This case study walks through the end-to-end architectural decisions made for a real nonprofit implementation, from the initial technology assessment through final system design. Organization and individual details have been generalized.
 
   
 
@@ -14,9 +14,9 @@ This case study walks through the end-to-end architectural decisions made for a 
 The organization had no existing technology infrastructure. Zero. A Google Workspace account, a domain name, and an ambitious vision for a multi-program residential facility. The technology brief was essentially: "We need everything."
 
 The complicating factors:
-- Programs would handle PHI across health, criminal justice, and children's services — three distinct sensitivity categories
+- Programs would handle PHI across health, criminal justice, and children's services: three distinct sensitivity categories
 - The organization had no in-house technical staff and no budget for a dedicated IT role
-- They needed to be fundable — meaning the technology documentation had to satisfy potential institutional funders and government partners
+- They needed to be fundable: meaning the technology documentation had to satisfy potential institutional funders and government partners
 - Total technology budget for year one: under $75,000 including all infrastructure, licensing, and professional services
 - Timeline: documentation and architecture ready for funder presentation within 90 days
 
@@ -62,7 +62,7 @@ Rejected. Firebase Realtime Database is not BAA-covered. Firestore is, but using
 **Option C: Three-layer (chosen)**
 - Layer 1 (WordPress/Hostinger): Needed anyway for public website. Cheap, flexible, familiar to non-technical staff.
 - Layer 2 (Firebase/Salesforce): Firebase Auth for RBAC is excellent. Salesforce NPSP is free for nonprofits and handles donor/volunteer/program data well.
-- Layer 3 (Cloud SQL + Cloud Storage): Right tool for structured PHI — relational, auditable, CMEK-capable, BAA-covered.
+- Layer 3 (Cloud SQL + Cloud Storage): Right tool for structured PHI: relational, auditable, CMEK-capable, BAA-covered.
 
   
 
@@ -106,24 +106,24 @@ flowchart LR
 ```
 
 **Which systems touch PHI (Cloud SQL):**
-- Client Management — intake records, assessments, health history
-- Family & Youth Services — children's records, family health data
-- Vocational Training — individualized training plans with assessment data
-- Reentry Coordination — criminal justice records, parole conditions
-- Worship & Counseling — counseling session notes, referrals
+- Client Management: intake records, assessments, health history
+- Family & Youth Services: children's records, family health data
+- Vocational Training: individualized training plans with assessment data
+- Reentry Coordination: criminal justice records, parole conditions
+- Worship & Counseling: counseling session notes, referrals
 
 **Which systems stay in Firestore (no PHI):**
-- Mobile Ministry Dispatch — scheduling and location data only
-- Operations & HR — staff employment records (no client PHI)
-- Donor Relations — donor data routed to Salesforce
-- Document Management — policy documents, templates, non-PHI files
-- Admin Dashboard — aggregate metrics, no individual PHI
+- Mobile Ministry Dispatch: scheduling and location data only
+- Operations & HR: staff employment records (no client PHI)
+- Donor Relations: donor data routed to Salesforce
+- Document Management: policy documents, templates, non-PHI files
+- Admin Dashboard: aggregate metrics, no individual PHI
 
   
 
 ## Cloud SQL Schema Design
 
-The PHI database was structured with a clear separation between client identity and clinical data — a deliberate design choice to limit PHI exposure in any single query.
+The PHI database was structured with a clear separation between client identity and clinical data, a deliberate design choice to limit PHI exposure in any single query.
 
 ```
 clients              (id, created_at, assigned_staff_id, program_id, status)
@@ -135,7 +135,7 @@ criminal_records     (client_id, offense_type, jurisdiction, conditions, status)
 documents            (client_id, document_type, storage_path, uploaded_by, uploaded_at)
 ```
 
-`health_records` uses an entity-attribute-value (EAV) pattern — `field_name` and `field_value` — so new PHI fields can be added without schema migrations. This also makes it straightforward to query only the fields a specific staff role is authorized to see.
+`health_records` uses an entity-attribute-value (EAV) pattern (`field_name` and `field_value`), so new PHI fields can be added without schema migrations. This also makes it straightforward to query only the fields a specific staff role is authorized to see.
 
   
 
@@ -180,7 +180,7 @@ flowchart LR
     WH2 -->|"Link payment to client\nno PHI to Stripe"| SQL2
 ```
 
-The critical design decision: Stripe receives `clientId` (a UUID) and payment amount — never the client's name, health status, or any PHI. The link between a payment and a client record lives only in Cloud SQL, accessible only through authenticated Cloud Functions.
+The critical design decision: Stripe receives `clientId` (a UUID) and payment amount, never the client's name, health status, or any PHI. The link between a payment and a client record lives only in Cloud SQL, accessible only through authenticated Cloud Functions.
 
   
 
@@ -216,7 +216,7 @@ The architecture work produced the following documentation, which was included i
 - 5-phase implementation timeline
 - Total cost of ownership projections
 
-This documentation package was specifically cited as a differentiator in funder conversations — it demonstrated operational readiness and governance maturity that most early-stage nonprofits cannot show.
+This documentation package was specifically cited as a differentiator in funder conversations; it demonstrated operational readiness and governance maturity that most early-stage nonprofits cannot show.
 
   
 
@@ -224,14 +224,14 @@ This documentation package was specifically cited as a differentiator in funder 
 
 **What worked:**
 - The three-layer separation made the compliance story clean and auditable
-- Cloud SQL for PHI with Firestore for operational data is the right split — don't try to do everything in one database
-- Firebase Auth custom claims for RBAC are underrated — they're simple, scalable, and directly usable in Firestore Security Rules
-- Google for Nonprofits credits are genuinely significant — apply on day one
+- Cloud SQL for PHI with Firestore for operational data is the right split: don't try to do everything in one database
+- Firebase Auth custom claims for RBAC are underrated: they're simple, scalable, and directly usable in Firestore Security Rules
+- Google for Nonprofits credits are genuinely significant: apply on day one
 
 **What would change:**
-- Start with Cloud SQL HA from the beginning rather than planning to enable it later — the migration is disruptive
+- Start with Cloud SQL HA from the beginning rather than planning to enable it later: the migration is disruptive
 - Build the audit logging Cloud Function before the first PHI-touching feature, not after
-- Document the Firestore schema formally before any data is written to it — retroactive schema documentation is painful
+- Document the Firestore schema formally before any data is written to it: retroactive schema documentation is painful
 
 **The hardest part:**
 Not the technology. The harder challenge is organizational change management. Getting staff comfortable with role-based access controls when they're used to spreadsheets requires clear communication about why it matters. The "why HIPAA" conversation needs to happen before the system is built, not when they first hit a permission denied error.
@@ -241,11 +241,11 @@ Not the technology. The harder challenge is organizational change management. Ge
 
 1. How are you handling Firestore Security Rules vs backend-only access for your PHI layer? Direct client SDK access to PHI collections is a common audit finding
 2. Is your RBAC model reflected in custom claims on Firebase Auth tokens, or enforced at the application layer?
-3. For the Medicaid contracts specifically — are you tracking toward _42 CFR Part 2_ requirements for substance use records? That's stricter than baseline HIPAA and catches a lot of recovery programs off guard
+3. For the Medicaid contracts specifically: are you tracking toward _42 CFR Part 2_ requirements for substance use records? That's stricter than baseline HIPAA and catches a lot of recovery programs off guard
 
 4. What does your current CI/CD pipeline look like for deploying to the PHI layer?
   
 
 *This case study is based on a real implementation. Organization details are generalized for privacy.*
 
-*Built by **Damarius McNair** — [Portfolio](https://dcodebase-x.github.io) · [GitHub](https://github.com/DCodeBase-X)*
+*Built by **Damarius McNair**, [Portfolio](https://dcodebase-x.github.io) · [GitHub](https://github.com/DCodeBase-X)*

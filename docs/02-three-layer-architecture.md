@@ -1,6 +1,6 @@
 # Three-Layer Architecture
 
-The core pattern for HIPAA-compliant systems on Firebase/GCP is a strict three-layer model. Each layer has a defined compliance scope, and the rule is enforced at the network and application level — not just policy.
+The core pattern for HIPAA-compliant systems on Firebase/GCP is a strict three-layer model. Each layer has a defined compliance scope, and the rule is enforced at the network and application level, not just policy.
 
  
 
@@ -48,38 +48,38 @@ flowchart TD
 
  
 
-## Layer 1 — Public Layer
+## Layer 1: Public Layer
 
 **Purpose:** Public-facing content. No authentication, no PHI, no BAA required.
 
 **Components:**
-- **Cloudflare** — DNS management, SSL termination, WAF, DDoS protection, HSTS
-- **WordPress on Hostinger** — Organization website, public program information, general contact forms, donation landing pages
+- **Cloudflare**: DNS management, SSL termination, WAF, DDoS protection, HSTS
+- **WordPress on Hostinger**: Organization website, public program information, general contact forms, donation landing pages
 
 **Rules:**
 - No PHI of any kind enters this layer
-- Contact forms collect name/email/phone only — never health information
-- Donation processing routes to Stripe/Givebutter — neither has PHI
+- Contact forms collect name/email/phone only: never health information
+- Donation processing routes to Stripe/Givebutter: neither has PHI
 - No database connection to Layer 2 or Layer 3 exists from this layer
-- Authentication happens at Layer 2 (Firebase Auth) — WordPress does not authenticate PHI users
+- Authentication happens at Layer 2 (Firebase Auth): WordPress does not authenticate PHI users
 
 **Why this layer exists:** Most nonprofits need a public website. Keeping it completely separate from the operational system means a WordPress vulnerability (which are extremely common) cannot expose PHI.
 
  
 
-## Layer 2 — Operational Layer
+## Layer 2: Operational Layer
 
 **Purpose:** Identity, business logic, and non-PHI operational data. This is where staff work day-to-day.
 
 **Components:**
-- **Firebase Auth** — Staff, volunteer, and client portal authentication. Role-based custom claims. MFA enforcement for clinical roles.
-- **Cloud Functions** — All application business logic. The only component permitted to query Layer 3. Acts as a controlled API gateway between the client app and PHI storage.
-- **Firestore** — Non-PHI operational data: schedules, task assignments, volunteer coordination, program enrollment status (without clinical details), notifications, audit event records.
-- **Salesforce NPSP** — Donor management, volunteer records, grant tracking, organizational reporting — none of which contain clinical PHI.
+- **Firebase Auth**: Staff, volunteer, and client portal authentication. Role-based custom claims. MFA enforcement for clinical roles.
+- **Cloud Functions**: All application business logic. The only component permitted to query Layer 3. Acts as a controlled API gateway between the client app and PHI storage.
+- **Firestore**: Non-PHI operational data: schedules, task assignments, volunteer coordination, program enrollment status (without clinical details), notifications, audit event records.
+- **Salesforce NPSP**: Donor management, volunteer records, grant tracking, organizational reporting: none of which contain clinical PHI.
 
 **Rules:**
-- Cloud Functions are the only path to Layer 3 — no direct client-to-database connections
-- Firestore stores non-PHI data only — client IDs and program enrollment flags are acceptable; diagnoses and assessments are not
+- Cloud Functions are the only path to Layer 3: no direct client-to-database connections
+- Firestore stores non-PHI data only: client IDs and program enrollment flags are acceptable; diagnoses and assessments are not
 - PHI is never logged in Cloud Functions logs
 - All Cloud Functions validate authentication and role before executing
 
@@ -88,19 +88,19 @@ Direct Firestore client SDK access is fine for non-PHI data, but PHI in Cloud SQ
 
  
 
-## Layer 3 — Secure Data Layer
+## Layer 3: Secure Data Layer
 
 **Purpose:** PHI storage. Designed to be inaccessible except through authenticated, authorized Cloud Functions.
 
 **Components:**
-- **Google Cloud SQL (PostgreSQL or MySQL)** — Primary PHI database. Private IP only, no public endpoint. Encrypted at rest with CMEK (Customer-Managed Encryption Keys). Automatic backups. Audit logging.
-- **Cloud Storage** — PHI documents: intake forms, assessments, legal documents, clinical notes as files. Uniform bucket-level access control. No public buckets. Object versioning enabled.
+- **Google Cloud SQL (PostgreSQL or MySQL)**: Primary PHI database. Private IP only, no public endpoint. Encrypted at rest with CMEK (Customer-Managed Encryption Keys). Automatic backups. Audit logging.
+- **Cloud Storage**: PHI documents: intake forms, assessments, legal documents, clinical notes as files. Uniform bucket-level access control. No public buckets. Object versioning enabled.
 
 **Rules:**
-- No public IP on Cloud SQL — accessible only via VPC connector from Cloud Functions
+- No public IP on Cloud SQL: accessible only via VPC connector from Cloud Functions
 - All data encrypted at rest (Google-managed or CMEK)
 - All data encrypted in transit (TLS 1.2+, enforced at instance level)
-- Cloud SQL Proxy or VPC used for all connections — never raw TCP from public network
+- Cloud SQL Proxy or VPC used for all connections: never raw TCP from public network
 - Cloud Storage buckets: uniform access, no public objects, versioning enabled, lifecycle policies for retention
 - Audit logging enabled for all read/write operations
 
@@ -112,7 +112,7 @@ A staff member submits a new client intake form containing PHI. Here's the compl
 
 ```mermaid
 sequenceDiagram
-    actor Staff as Staff Member
+    actor Staff Member
     participant App as Client App (Browser)
     participant Auth as Firebase Auth
     participant CF as Cloud Function
@@ -149,13 +149,13 @@ PHI enters Cloud SQL. A non-PHI event record goes to Firestore. The audit log re
 This model scales from a 10-person nonprofit to a 500-person organization without architectural changes:
 
 | Scale | Adjustment |
-| | |
+| --- | --- |
 | **Early stage (10 staff)** | Firebase Spark → Blaze, single Cloud SQL instance (db-f1-micro ~$10/mo) |
 | **Growing (50 staff)** | Upgrade Cloud SQL tier, add read replicas, add Cloud CDN for static assets |
 | **Established (200+ staff)** | Cloud SQL High Availability, multi-region Firestore, dedicated VPC, Cloud Armor |
 | **Multi-location** | Regional Cloud SQL instances, Cloud Spanner consideration, Firebase multi-region |
 
-The compliance requirements don't change with scale — the infrastructure to meet them gets more robust.
+The compliance requirements don't change with scale; the infrastructure to meet them gets more robust.
 
  
 

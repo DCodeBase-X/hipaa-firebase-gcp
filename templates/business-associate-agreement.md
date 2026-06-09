@@ -1,4 +1,4 @@
-> **LEGAL DISCLAIMER — READ BEFORE USE**
+> **LEGAL DISCLAIMER: READ BEFORE USE**
 >
 > This document is a reference template only. It is NOT legal advice and does NOT constitute a legally binding agreement until reviewed, customized, and signed by authorized parties. Laws and regulations vary by jurisdiction and change over time.
 >
@@ -7,7 +7,7 @@
 > HHS provides a free Model BAA with sample provisions:
 > https://www.hhs.gov/hipaa/for-professionals/covered-entities/sample-business-associate-agreement-provisions/index.html
 >
-> When a vendor (e.g., Google, Salesforce) provides their own BAA, sign theirs — do not substitute this template.
+> When a vendor (e.g., Google, Salesforce) provides their own BAA, sign theirs; do not substitute this template.
 
 ---
 
@@ -27,7 +27,7 @@ Name: [BUSINESS ASSOCIATE NAME]
 Address: [ADDRESS]
 Contact: [NAME, TITLE, EMAIL]
 
-**Services covered by this Agreement:** [SERVICE DESCRIPTION — e.g., "software development and maintenance of the case management application"]
+**Services covered by this Agreement:** [SERVICE DESCRIPTION, e.g., "software development and maintenance of the case management application"]
 
 ---
 
@@ -36,11 +36,11 @@ Contact: [NAME, TITLE, EMAIL]
 Terms used but not otherwise defined in this Agreement have the meanings given to them in the HIPAA Rules (45 CFR Parts 160 and 164).
 
 - **PHI (Protected Health Information):** Individually identifiable health information that Business Associate creates, receives, maintains, or transmits on behalf of Covered Entity.
-- **Covered Entity:** A health plan, health care clearinghouse, or health care provider that transmits health information electronically — here, [COVERED ENTITY NAME].
-- **Business Associate:** A person or entity that performs functions or activities involving the use or disclosure of PHI on behalf of a Covered Entity — here, [BUSINESS ASSOCIATE NAME].
+- **Covered Entity:** A health plan, health care clearinghouse, or health care provider that transmits health information electronically: here, [COVERED ENTITY NAME].
+- **Business Associate:** A person or entity that performs functions or activities involving the use or disclosure of PHI on behalf of a Covered Entity: here, [BUSINESS ASSOCIATE NAME].
 - **Breach:** Unauthorized acquisition, access, use, or disclosure of PHI that compromises its security or privacy, as defined in 45 CFR § 164.402.
 - **Security Incident:** An attempted or successful unauthorized access, use, disclosure, modification, or destruction of information or interference with system operations.
-- **Subcontractor:** A person who acts on behalf of Business Associate — other than as a workforce member — and handles PHI.
+- **Subcontractor:** A person who acts on behalf of Business Associate, other than as a workforce member, and handles PHI.
 
 ---
 
@@ -69,11 +69,11 @@ Business Associate must:
 - Train workforce members who handle PHI on applicable requirements; and
 - Apply equivalent protections to electronic PHI (ePHI) as required by 45 CFR § 164.314.
 
-### 2.4 Reporting — Security Incidents and Breaches
+### 2.4 Reporting: Security Incidents and Breaches
 
-**Security Incidents:** Business Associate must report any Security Incident of which it becomes aware to Covered Entity within **[5 business days]** of discovery. (Note: This 5-business-day deadline is a *contractual* requirement. HIPAA does not impose a specific statutory deadline for reporting security incidents to the Covered Entity — the 60-day outer limit and "without unreasonable delay" standard apply only to Breach notification, described below. Parties may set any reasonable contractual window for security incident reporting.)
+**Security Incidents:** Business Associate must report any Security Incident of which it becomes aware to Covered Entity within **[5 business days]** of discovery. (Note: This 5-business-day deadline is a *contractual* requirement. HIPAA does not impose a specific statutory deadline for reporting security incidents to the Covered Entity; the 60-day outer limit and "without unreasonable delay" standard apply only to Breach notification, described below. Parties may set any reasonable contractual window for security incident reporting.)
 
-**Breaches of Unsecured PHI:** Business Associate must notify Covered Entity of any Breach of Unsecured PHI without unreasonable delay and no later than **[5 business days]** after discovery. (Note: The "without unreasonable delay / no later than 60 calendar days after discovery" standard is the statutory requirement under 45 CFR § 164.410. The **[5 business days]** deadline above is a contractual shortening of that outer limit — strongly recommended in practice.) Notification must include, to the extent possible:
+**Breaches of Unsecured PHI:** Business Associate must notify Covered Entity of any Breach of Unsecured PHI without unreasonable delay and no later than **[5 business days]** after discovery. (Note: The "without unreasonable delay / no later than 60 calendar days after discovery" standard is the statutory requirement under 45 CFR § 164.410. The **[5 business days]** deadline above is a contractual shortening of that outer limit and is strongly recommended in practice.) Notification must include, to the extent possible:
 
 - A description of the Breach (what happened, date of Breach, date of discovery);
 - The types of PHI involved (e.g., name, date of birth, diagnosis);
@@ -199,28 +199,28 @@ Use this checklist when a vendor provides its own BAA for your review. Every ite
 
 ### Regulatory Requirements (45 CFR § 164.504(e))
 
-- [ ] **Permitted uses and disclosures are limited** — BA may only use/disclose PHI to perform services or as required by law
-- [ ] **Appropriate safeguards** — BA is required to implement administrative, physical, and technical safeguards
-- [ ] **Breach/security incident reporting** — BA must report breaches and security incidents to Covered Entity (confirm notification deadline; 60 days is the HIPAA maximum — push for 5–10 business days)
-- [ ] **Subcontractor requirement** — BA must ensure subcontractors who handle PHI sign a BAA
-- [ ] **Individual access** — BA must provide access to PHI for individuals and Covered Entity upon request
-- [ ] **Amendments to PHI** — BA must accommodate amendments to PHI in Designated Record Sets
-- [ ] **Accounting of disclosures** — BA must provide information for accounting of disclosures
-- [ ] **HHS access** — BA must make practices and records available to HHS for compliance review
-- [ ] **Term and termination clause** — Agreement has a clear term and conditions for termination
-- [ ] **Return or destroy PHI on termination** — Agreement addresses what happens to PHI when it ends
+- [ ] **Permitted uses and disclosures are limited**: BA may only use/disclose PHI to perform services or as required by law
+- [ ] **Appropriate safeguards**: BA is required to implement administrative, physical, and technical safeguards
+- [ ] **Breach/security incident reporting**: BA must report breaches and security incidents to Covered Entity (confirm notification deadline; 60 days is the HIPAA maximum; push for 5–10 business days)
+- [ ] **Subcontractor requirement**: BA must ensure subcontractors who handle PHI sign a BAA
+- [ ] **Individual access**: BA must provide access to PHI for individuals and Covered Entity upon request
+- [ ] **Amendments to PHI**: BA must accommodate amendments to PHI in Designated Record Sets
+- [ ] **Accounting of disclosures**: BA must provide information for accounting of disclosures
+- [ ] **HHS access**: BA must make practices and records available to HHS for compliance review
+- [ ] **Term and termination clause**: Agreement has a clear term and conditions for termination
+- [ ] **Return or destroy PHI on termination**: Agreement addresses what happens to PHI when it ends
 
 ### Best-Practice Provisions to Verify
 
-- [ ] **Breach notification deadline is reasonable** — 5–10 business days is common; 60 days is the HIPAA outer limit and is too long for practical purposes
-- [ ] **BA bears breach notification costs** — Costs of notifying affected individuals fall on the BA when breach is BA's fault
-- [ ] **Specific services are described** — The BAA identifies which services justify access to PHI
-- [ ] **No broad self-use of PHI** — BA does not claim rights to use PHI for its own marketing, analytics, or product improvement
-- [ ] **Security Rule compliance** — BAA references both Privacy Rule and Security Rule obligations (especially important for ePHI/cloud vendors)
-- [ ] **Signature by authorized representative** — The person signing has authority to bind the organization
-- [ ] **Governing law is acceptable** — Jurisdiction clause is acceptable to the organization
+- [ ] **Breach notification deadline is reasonable**: 5–10 business days is common; 60 days is the HIPAA outer limit and is too long for practical purposes
+- [ ] **BA bears breach notification costs**: Costs of notifying affected individuals fall on the BA when breach is BA's fault
+- [ ] **Specific services are described**: The BAA identifies which services justify access to PHI
+- [ ] **No broad self-use of PHI**: BA does not claim rights to use PHI for its own marketing, analytics, or product improvement
+- [ ] **Security Rule compliance**: BAA references both Privacy Rule and Security Rule obligations (especially important for ePHI/cloud vendors)
+- [ ] **Signature by authorized representative**: The person signing has authority to bind the organization
+- [ ] **Governing law is acceptable**: Jurisdiction clause is acceptable to the organization
 
-### Red Flags — Escalate to Counsel Immediately
+### Red Flags: Escalate to Counsel Immediately
 
 - [ ] BAA purports to limit BA's liability to a nominal amount for HIPAA violations
 - [ ] BAA grants BA broad rights to use PHI for its own purposes

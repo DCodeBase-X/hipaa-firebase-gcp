@@ -1,6 +1,6 @@
 # Multi-Vendor Boundaries
 
-Real nonprofit systems don't run on a single platform. A typical stack spans a public website host, a developer platform, a cloud database, a CRM, a payment processor, and a CDN. HIPAA compliance requires knowing exactly where PHI crosses vendor boundaries — and whether each vendor has a signed BAA.
+Real nonprofit systems don't run on a single platform. A typical stack spans a public website host, a developer platform, a cloud database, a CRM, a payment processor, and a CDN. HIPAA compliance requires knowing exactly where PHI crosses vendor boundaries and whether each vendor has a signed BAA.
 
 This page maps the boundaries for a Firebase/GCP nonprofit stack.
 
@@ -80,8 +80,6 @@ This decision cannot be left as "consult counsel later." Your compliance documen
 **Practical recommendation for most nonprofits:** Cloudflare Business ($200/month) includes WAF, bot protection, and rate limiting that provide genuine security value beyond the BAA requirement. For organizations handling PHI at any scale, the BAA is worth the plan upgrade. Apply for Cloudflare's nonprofit discount program. It reduces the cost significantly.
 
 **Configuration requirements (all plans):**
-
-**Configuration requirements:**
 - Enable "Always Use HTTPS"
 - Set minimum TLS version to 1.2
 - Enable HSTS
@@ -94,11 +92,11 @@ This decision cannot be left as "consult counsel later." Your compliance documen
 **BAA status:** Not available.
 **PHI allowed:** No.
 
-Hostinger hosts your public-facing WordPress site. The architectural rule is simple: no PHI ever touches this layer. Contact forms on the WordPress site should not collect health information — route users to your Firebase-authenticated portal for anything involving PHI.
+Hostinger hosts your public-facing WordPress site. The architectural rule is simple: no PHI ever touches this layer. Contact forms on the WordPress site should not collect health information; route users to your Firebase-authenticated portal for anything involving PHI.
 
 **What's safe on Hostinger:**
 - Public program information
-- General contact forms (name, email, phone — no health data)
+- General contact forms (name, email, phone: no health data)
 - Donation pages (payment handled by Stripe/Givebutter)
 - Blog, news, organizational information
 
@@ -106,11 +104,11 @@ Hostinger hosts your public-facing WordPress site. The architectural rule is sim
 
 ### Salesforce NPSP ⚠️
 **BAA status:** Tier-dependent. Salesforce will sign a BAA for certain editions.
-**Which editions:** Health Cloud is explicitly HIPAA-capable. NPSP (Nonprofit Success Pack) on Enterprise and above can have a BAA — verify with your Salesforce rep before assuming.
+**Which editions:** Health Cloud is explicitly HIPAA-capable. NPSP (Nonprofit Success Pack) on Enterprise and above can have a BAA; verify with your Salesforce rep before assuming.
 
-**Common mistake:** Organizations assume all Salesforce is HIPAA-covered. It's not — your specific edition and contract matter.
+**Common mistake:** Organizations assume all Salesforce is HIPAA-covered. It's not; your specific edition and contract matter.
 
-**Recommended architecture:** Use Salesforce for non-PHI program management — donor relationships, volunteer coordination, program enrollment tracking (not clinical data). Route actual PHI to Cloud SQL / Firestore where your Google BAA clearly covers it. This limits your Salesforce compliance surface area.
+**Recommended architecture:** Use Salesforce for non-PHI program management: donor relationships, volunteer coordination, program enrollment tracking (not clinical data). Route actual PHI to Cloud SQL / Firestore where your Google BAA clearly covers it. This limits your Salesforce compliance surface area.
 
 ```mermaid
 flowchart LR
@@ -126,7 +124,7 @@ flowchart LR
 
 ### Stripe & Givebutter ❌
 **BAA status:** Stripe does not sign BAAs. Givebutter does not sign BAAs.
-**PHI allowed:** No — these handle payment data under PCI-DSS, not health data under HIPAA.
+**PHI allowed:** No. These handle payment data under PCI-DSS, not health data under HIPAA.
 
 **The risk scenario to avoid:** A client who is also a donor. If your system ties a payment record to a client record that contains PHI, ensure the connection is one-directional and PHI never flows into Stripe or Givebutter.
 
@@ -139,7 +137,7 @@ flowchart LR
 - **Google Workspace:** BAA available, covers Gmail when used through your organization account
 - **SendGrid:** BAA available on higher tiers
 - **Mailchimp:** Does not sign BAAs for HIPAA purposes
-- **Standard consumer email (Gmail free, Outlook.com):** No BAA — not for PHI
+- **Standard consumer email (Gmail free, Outlook.com):** No BAA: not for PHI
 
 **The practical rule:** Do not send PHI in email body text. Ever. Use a secure message notification ("You have a new secure message — log in to view it") that directs the user to your authenticated portal. This sidesteps the email BAA question for most communication.
 

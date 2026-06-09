@@ -1,6 +1,6 @@
 # Firebase HIPAA Guide
 
-Firebase is Google's developer-facing platform. It's distinct from GCP in how it's marketed and how developers use it — but from a HIPAA perspective, what matters is which Firebase services are covered under Google's BAA and which are not.
+Firebase is Google's developer-facing platform. It's distinct from GCP in how it's marketed and how developers use it, but from a HIPAA perspective, what matters is which Firebase services are covered under Google's BAA and which are not.
 
 This page covers what's covered, the critical gotchas, and the specific configuration required for each service.
 
@@ -10,12 +10,12 @@ This page covers what's covered, the critical gotchas, and the specific configur
 
 ### Covered Under Google's BAA ✅
 
-These Firebase services can handle PHI — **after you sign the BAA and configure them correctly:**
+These Firebase services can handle PHI; **sign the BAA and configure them correctly before handling any PHI:**
 
 | Service | PHI Allowed | Key Requirements |
 |---|---|---|
 | **Cloud Firestore** | ✅ | Enable audit logging; use server-side security rules |
-| **Firebase Authentication** | ⚠️ Limited | Identity only — no clinical data in user profiles or custom claims |
+| **Firebase Authentication** | ⚠️ Limited | Identity only: no clinical data in user profiles or custom claims |
 | **Cloud Functions for Firebase** | ✅ | Don't log PHI; use VPC connector for Cloud SQL access |
 | **Cloud Storage for Firebase** | ✅ | Enable uniform bucket-level access; no public buckets |
 | **Cloud SQL** (via Firebase Admin) | ✅ | Private IP only; enable CMEK; audit logging on |
@@ -27,16 +27,16 @@ These Firebase services **cannot touch PHI**. If PHI is passing through them, yo
 | Service | Why It's Not Covered |
 |---|---|
 | **Firebase Realtime Database** | Explicitly excluded from Google's BAA |
-| **Firebase Hosting** | Not in BAA — for public content only |
+| **Firebase Hosting** | Not in BAA: for public content only |
 | **Firebase Analytics / Google Analytics** | Data goes to Google's analytics infrastructure, not BAA-covered |
-| **Crashlytics** | Crash reports may contain device state — not covered |
+| **Crashlytics** | Crash reports may contain device state: not covered |
 | **Firebase Performance Monitoring** | Same as Crashlytics |
 | **Firebase Remote Config** | Config values could leak PHI in logs |
 | **Firebase A/B Testing** | Analytics-based, not covered |
 
 ### The Critical Gotcha: Realtime Database vs. Firestore
 
-This is the mistake teams make most often. Firebase launched with Realtime Database. Many tutorials, older codebases, and Firebase quickstarts use it. **Realtime Database is not in Google's BAA.** Firestore — which launched later and is the current recommended database — is.
+This is the mistake teams make most often. Firebase launched with Realtime Database. Many tutorials, older codebases, and Firebase quickstarts use it. **Realtime Database is not in Google's BAA.** Firestore, which launched later and is the current recommended database, is.
 
 If you inherited a Firebase codebase or are following older tutorials, check which database you're using before storing any PHI.
 
@@ -63,7 +63,7 @@ Before storing any PHI:
 3. Scroll to **"HIPAA Business Associate Amendment"**
 4. Review and accept
 
-This covers all Firebase and GCP services that appear on [Google's BAA-eligible services list](https://cloud.google.com/security/compliance/hipaa-compliance). The list is updated periodically — bookmark it and review it when you add new services.
+This covers all Firebase and GCP services that appear on [Google's BAA-eligible services list](https://cloud.google.com/security/compliance/hipaa-compliance). The list is updated periodically; bookmark it and review it when you add new services.
 
 ---
 
@@ -121,7 +121,7 @@ Every PHI access is now logged to Cloud Logging with timestamp, user identity, a
 
 ### Data Location
 
-Set Firestore's data location to a US multi-region at project creation — this cannot be changed later:
+Set Firestore's data location to a US multi-region at project creation; this cannot be changed later:
 - `us-central` or `us-east1` for single region
 - `nam5` (US multi-region) for higher availability
 
@@ -168,9 +168,9 @@ exports.setUserRole = functions.https.onCall(async (data, context) => {
 });
 ```
 
-**Enforce MFA for staff roles.** Admin and clinical staff must have MFA enforced. MFA enforcement has two distinct layers — both are required:
+**Enforce MFA for staff roles.** Admin and clinical staff must have MFA enforced. MFA enforcement has two distinct layers; both are required:
 
-**Server-side (authoritative) — inside every PHI-touching Cloud Function:**
+**Server-side (authoritative): inside every PHI-touching Cloud Function:**
 ```javascript
 // This is the security control. Client-side checks alone are bypassable.
 const user = await admin.auth().getUser(context.auth.uid);
@@ -184,7 +184,7 @@ if (['admin', 'clinical_staff'].includes(role)) {
 }
 ```
 
-**Client-side (UX only) — surfaces the requirement early in the auth flow:**
+**Client-side (UX only): surfaces the requirement early in the auth flow:**
 ```javascript
 // This improves user experience but is not a security control.
 // A caller hitting the Cloud Function directly bypasses this entirely.

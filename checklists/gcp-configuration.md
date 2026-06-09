@@ -1,13 +1,13 @@
 # GCP Configuration Checklist
 
-Google Cloud Platform settings beyond Firebase — IAM, networking, audit logging, and project-level controls.
+Google Cloud Platform settings beyond Firebase: IAM, networking, audit logging, and project-level controls.
 
   
 
 ## Project & Organization Settings
 
-- [ ] **Google BAA is signed** — confirmed in IAM & Admin → Settings
-- [ ] A dedicated GCP project is used for the HIPAA workload — not shared with non-HIPAA applications
+- [ ] **Google BAA is signed**: confirmed in IAM & Admin → Settings
+- [ ] A dedicated GCP project is used for the HIPAA workload: not shared with non-HIPAA applications
 - [ ] Project has a meaningful name that identifies the environment (prod, staging)
 - [ ] **Billing alerts** are configured at 50%, 90%, and 100% of monthly budget
 - [ ] Project **labels** include `environment`, `hipaa-scope: true`, `owner`
@@ -18,23 +18,23 @@ Google Cloud Platform settings beyond Firebase — IAM, networking, audit loggin
 
 - [ ] **Principle of least privilege** is applied to all service accounts and users
 - [ ] No IAM bindings use `allUsers` or `allAuthenticatedUsers` on PHI resources
-- [ ] **Service accounts are purpose-specific** — one service account per Cloud Function group, not a shared account
-- [ ] Service accounts do not have `roles/owner` or `roles/editor` — use granular roles
+- [ ] **Service accounts are purpose-specific**: one service account per Cloud Function group, not a shared account
+- [ ] Service accounts do not have `roles/owner` or `roles/editor`: use granular roles
 - [ ] **IAM conditions** are used where possible to restrict access by time, IP, or resource
 - [ ] Human users with IAM access use **Google Workspace accounts**, not personal Gmail
 - [ ] **IAM audit logging** is enabled: IAM Admin Read + Data Read at the org/project level
 - [ ] Unused service accounts are disabled or deleted
-- [ ] Service account keys are **not stored in code repositories** — use Workload Identity Federation or Secret Manager
+- [ ] Service account keys are **not stored in code repositories**: use Workload Identity Federation or Secret Manager
 
   
 
 ## VPC and Networking
 
 - [ ] A dedicated **VPC network** is configured for the HIPAA project (not the default VPC)
-- [ ] **Private Google Access** is enabled on subnets — allows Cloud Functions and Cloud SQL to communicate without traversing the public internet
+- [ ] **Private Google Access** is enabled on subnets: allows Cloud Functions and Cloud SQL to communicate without traversing the public internet
 - [ ] **VPC connector** is configured for Cloud Functions → Cloud SQL private access
-- [ ] Cloud SQL instance has **private IP only** — public IP is disabled
-- [ ] **Firewall rules** are reviewed — no rules allow ingress from `0.0.0.0/0` on database ports
+- [ ] Cloud SQL instance has **private IP only**: public IP is disabled
+- [ ] **Firewall rules** are reviewed: no rules allow ingress from `0.0.0.0/0` on database ports
 - [ ] **VPC Flow Logs** are enabled for audit visibility into network traffic
 
   
@@ -51,7 +51,7 @@ This is non-negotiable. Every PHI-relevant service must have audit logging enabl
   - [ ] Identity and Access Management (IAM) API
   - [ ] Cloud Key Management Service (if using CMEK)
 
-- [ ] **Log retention** is configured — default is 30 days for Data Access logs; extend to 1 year+ for HIPAA audit trails
+- [ ] **Log retention** is configured: default is 30 days for Data Access logs; extend to 1 year+ for HIPAA audit trails
 - [ ] Audit logs are **exported to Cloud Storage** for long-term retention (use a log sink)
 - [ ] Log export bucket has **Object Lock** or retention policy to prevent deletion
 
@@ -68,8 +68,8 @@ Log filter:
 
 ## Secret Manager
 
-- [ ] **Secret Manager** is used for all credentials — database passwords, API keys, service account keys
-- [ ] Cloud Functions access secrets via Secret Manager API — not environment variables in plaintext
+- [ ] **Secret Manager** is used for all credentials: database passwords, API keys, service account keys
+- [ ] Cloud Functions access secrets via Secret Manager API: not environment variables in plaintext
 - [ ] Secrets have **rotation policies** configured
 - [ ] Access to Secret Manager is restricted to necessary service accounts only
 - [ ] Secret versions are **disabled (not deleted)** when rotated, to preserve audit trail
@@ -87,22 +87,22 @@ Log filter:
 
 **Who initiates rotation:** Security Officer or Lead Developer by written delegation. Every rotation must be logged (see rotation log below).
 
-**Standard rotation — step by step**
+**Standard rotation: step by step**
 
 1. In Secret Manager, add a new secret version. Do not delete or disable the old version yet.
 2. Redeploy any Cloud Functions that consume the secret. If the function references the `latest` version alias, redeployment picks up the new version automatically.
 3. Verify the new credential: run a test request and confirm Cloud Function logs show no authentication errors.
-4. Disable (do not delete) the old secret version — it is preserved for the audit trail but is no longer active.
+4. Disable (do not delete) the old secret version: it is preserved for the audit trail but is no longer active.
 5. After 30 days with no issues, the old version may be permanently deleted.
 6. Record the rotation in the change log per `docs/14-change-control-policy.md`.
 
 **Emergency rotation (suspected compromise)**
 
-Act immediately — do not wait for the next scheduled window:
+Act immediately. Do not wait for the next scheduled window:
 
 1. Create a new secret version.
 2. Force-redeploy all Cloud Functions that used the compromised credential.
-3. Disable the old secret version immediately — the 30-day wait does not apply.
+3. Disable the old secret version immediately: the 30-day wait does not apply.
 4. Notify the Security Officer.
 5. Initiate incident response per `checklists/incident-response-runbook.md`.
 
@@ -117,7 +117,7 @@ Act immediately — do not wait for the next scheduled window:
 ## Cloud SQL Checklist (GCP Level)
 
 - [ ] Instance is in the **same region** as Cloud Functions to minimize latency and egress cost
-- [ ] **Deletion protection** is enabled — prevents accidental instance deletion
+- [ ] **Deletion protection** is enabled: prevents accidental instance deletion
 - [ ] **Maintenance window** is set to a low-traffic window (weekend nights)
 - [ ] **Backup configuration:**
   - Automated daily backups enabled
@@ -129,16 +129,16 @@ Act immediately — do not wait for the next scheduled window:
   - `log_disconnections = on`
   - `log_duration = on` (for compliance audit purposes)
   - `require_ssl = on`
-- [ ] **High Availability** is evaluated — enable if uptime SLA matters (doubles cost)
-- [ ] Database schema has a dedicated `phi` schema or database — makes access auditing cleaner
+- [ ] **High Availability** is evaluated: enable if uptime SLA matters (doubles cost)
+- [ ] Database schema has a dedicated `phi` schema or database: makes access auditing cleaner
 
   
 
 ## Cloud Storage (GCP Level)
 
 - [ ] PHI buckets are in a **US location** (not EU or Asia unless required by contract)
-- [ ] **Retention policies** are locked on PHI buckets — prevents premature deletion
-- [ ] **Soft delete** is enabled — 30+ day recovery window for accidentally deleted objects
+- [ ] **Retention policies** are locked on PHI buckets: prevents premature deletion
+- [ ] **Soft delete** is enabled: 30+ day recovery window for accidentally deleted objects
 - [ ] Bucket-level audit logging is verified in the Audit Logs section
 - [ ] **CORS configuration** is set to restrict which domains can access storage objects
 
@@ -156,7 +156,7 @@ Act immediately — do not wait for the next scheduled window:
 **Sign-off:**
 
 | Area | Reviewer | Date | Status |
-|  |  |  |  |
+|---|---|---|---|
 | Project & org settings | | | |
 | IAM configuration | | | |
 | VPC and networking | | | |

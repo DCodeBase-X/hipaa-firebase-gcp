@@ -7,7 +7,7 @@
 
 ---
 
-> **Reference**: 45 CFR §§ 164.400–414 — Breach Notification Rule
+> **Reference**: 45 CFR §§ 164.400–414 (Breach Notification Rule)
 > **Also see**: `checklists/incident-response-runbook.md` for the step-by-step operational response.
 
 ---
@@ -32,7 +32,7 @@ Not every security incident is a reportable breach. Apply the **four-factor risk
 
 ### 1.1 Threshold: Was PHI Involved?
 
-First, confirm that the incident involved PHI (as defined in `docs/06-data-classification.md`). If no PHI was involved, this is a security incident, not a HIPAA breach — document it but notification is not required.
+First, confirm that the incident involved PHI (as defined in `docs/06-data-classification.md`). If no PHI was involved, this is a security incident, not a HIPAA breach; document it but notification is not required.
 
 ### 1.2 Four-Factor Risk Assessment
 
@@ -61,11 +61,11 @@ If PHI was involved, assess all four factors. If **any factor indicates high pro
 |-----------|----------|---------|
 | Affected individuals | **60 calendar days** from discovery | All reportable breaches |
 | HHS (Secretary) | **60 calendar days** from discovery (breaches ≥ 500 individuals) | Large breaches |
-| HHS (Secretary) — annual log | **60 days after end of calendar year** | Small breaches (< 500 individuals) |
+| HHS (Secretary): annual log | **60 days after end of calendar year** | Small breaches (< 500 individuals) |
 | Prominent media outlets | **60 calendar days** from discovery | Breaches ≥ 500 individuals **in a single state or jurisdiction** |
 | Business Associates | **Without unreasonable delay**, not to exceed 60 days | If BA caused or discovered the breach |
 
-> **Discovery date**: The first day the organization knew or should have known a breach occurred — not when the investigation is complete.
+> **Discovery date**: The first day the organization knew or should have known a breach occurred, not when the investigation is complete.
 
 ### 2.2 Required Content: Individual Notification
 
@@ -114,7 +114,7 @@ See `templates/breach-notification-letter.md` for a pre-drafted template.
 
 ## Section 4: State Law Considerations
 
-HIPAA sets the federal floor. Many states have breach notification laws that are **stricter** — shorter timelines, broader definitions of personal information, or additional notification requirements. Always verify your state's law:
+HIPAA sets the federal floor. Many states have breach notification laws that are **stricter**: shorter timelines, broader definitions of personal information, or additional notification requirements. Always verify your state's law:
 
 | Consideration | Check Required |
 |---------------|---------------|
@@ -130,7 +130,7 @@ HIPAA sets the federal floor. Many states have breach notification laws that are
 
 ## Section 5: Documentation Requirements
 
-HIPAA requires documentation of **all** breach determinations — including incidents determined NOT to be reportable breaches. Retain for **6 years** from the date of creation or last effective date.
+HIPAA requires documentation of **all** breach determinations, including incidents determined NOT to be reportable breaches. Retain for **6 years** from the date of creation or last effective date.
 
 ### 5.1 Breach Incident Log
 
@@ -186,7 +186,7 @@ Within 30 days of breach resolution, conduct a lessons-learned review:
 
 ## Related Documents
 
-- `templates/breach-notification-letter.md` — Pre-drafted individual notification letter
-- `checklists/incident-response-runbook.md` — Step-by-step operational response
-- `docs/08-risk-analysis-template.md` — Update after any breach
-- `docs/11-administrative-policies.md` — Sanctions and workforce policies
+- `templates/breach-notification-letter.md`: Pre-drafted individual notification letter
+- `checklists/incident-response-runbook.md`: Step-by-step operational response
+- `docs/08-risk-analysis-template.md`: Update after any breach
+- `docs/11-administrative-policies.md`: Sanctions and workforce policies

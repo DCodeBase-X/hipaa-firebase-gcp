@@ -1,6 +1,6 @@
 # Environment Separation Strategy
 
-> **Reference**: 45 CFR § 164.308(a)(1) — Security Management Process
+> **Reference**: 45 CFR § 164.308(a)(1) (Security Management Process)
 > Using production PHI in development or testing environments is a HIPAA violation. This document defines the required environment structure and the rules governing each.
 
 ---
@@ -13,13 +13,13 @@
 
 ## Environment Structure
 
-Three separate GCP projects are required — one per environment. Sharing a project between environments undermines the access isolation that makes this boundary enforceable.
+Three separate GCP projects are required: one per environment. Sharing a project between environments undermines the access isolation that makes this boundary enforceable.
 
 | Environment | GCP Project | Firebase Project | PHI Permitted | BAA Required |
 |---|---|---|---|---|
-| **Production** (`prod`) | `your-org-prod` | `your-org-prod` | Yes | Yes — signed |
-| **Staging** (`staging`) | `your-org-staging` | `your-org-staging` | No — synthetic only | No |
-| **Development** (`dev`) | `your-org-dev` | `your-org-dev` | No — synthetic only | No |
+| **Production** (`prod`) | `your-org-prod` | `your-org-prod` | Yes | Yes: signed |
+| **Staging** (`staging`) | `your-org-staging` | `your-org-staging` | No: synthetic only | No |
+| **Development** (`dev`) | `your-org-dev` | `your-org-dev` | No: synthetic only | No |
 
 Each project has its own:
 - Firebase Auth users (test accounts only in dev/staging)
@@ -27,7 +27,7 @@ Each project has its own:
 - Cloud SQL instance
 - Cloud Storage buckets
 - Service accounts with no cross-environment permissions
-- IAM bindings — dev/staging credentials cannot authenticate to production
+- IAM bindings: dev/staging credentials cannot authenticate to production
 
 ---
 
@@ -38,7 +38,7 @@ A common shortcut is to use one Firebase project with environment-specific Fires
 - A single IAM misconfiguration can grant dev access to prod data
 - A Cloud Function deployed to the wrong environment can read the wrong database
 - Audit logs mix production and non-production access, complicating investigations
-- The Google BAA covers the project — a shared project means your dev environment is nominally in BAA scope, which creates compliance documentation complexity
+- The Google BAA covers the project: a shared project means your dev environment is nominally in BAA scope, which creates compliance documentation complexity
 
 Separate GCP projects eliminate all of these risks.
 
@@ -46,7 +46,7 @@ Separate GCP projects eliminate all of these risks.
 
 ## Synthetic Data Requirements
 
-Development and staging environments must be populated with **synthetic test data** — fabricated records that resemble real data in structure but contain no information about any real person.
+Development and staging environments must be populated with **synthetic test data**: fabricated records that resemble real data in structure but contain no information about any real person.
 
 **What synthetic data is:**
 - Fake names generated from a name list (e.g., Faker.js, Python Faker)
@@ -55,9 +55,9 @@ Development and staging environments must be populated with **synthetic test dat
 - Invented diagnoses and case notes using realistic clinical language but no real patient history
 
 **What synthetic data is not:**
-- Anonymized or de-identified real records — even de-identified data carries re-identification risk
-- Truncated or masked real records — partial real data is still real data
-- Records of staff members or volunteers — even non-PHI PII of real people is not appropriate test data
+- Anonymized or de-identified real records: even de-identified data carries re-identification risk
+- Truncated or masked real records: partial real data is still real data
+- Records of staff members or volunteers: even non-PHI PII of real people is not appropriate test data
 
 **Synthetic data generation:** Maintain a seeding script that populates dev/staging databases with a consistent, realistic dataset. Check this script into source control. Run it as part of environment provisioning.
 
@@ -119,7 +119,7 @@ if (!Object.values(ALLOWED_PROJECTS).includes(EXPECTED_PROJECT)) {
 | Developer write access to database | ❌ Never | ✅ Yes (synthetic data only) | ✅ Yes |
 | Security Officer read access | ✅ Yes | ✅ Yes | ✅ Yes |
 | Automated CI/CD deploy | ✅ With approval gate | ✅ Yes | ✅ Yes |
-| Direct console access to Cloud SQL | ❌ Never — Cloud Function only | ✅ For debugging | ✅ Yes |
+| Direct console access to Cloud SQL | ❌ Never: Cloud Function only | ✅ For debugging | ✅ Yes |
 
 Production database access is through Cloud Functions only. No developer, regardless of seniority or urgency, connects directly to the production Cloud SQL instance. If a break-glass procedure is needed, it must be documented, approved by the Security Officer, and fully audit-logged.
 
@@ -155,10 +155,10 @@ on_manual_approval (Security Officer):
 If PHI from production is discovered in a dev or staging environment:
 
 1. **Immediately** notify the Security Officer
-2. **Isolate** the non-production environment — disable access until scope is determined
-3. **Apply the four-factor breach assessment** (`docs/09-breach-notification-procedure.md §1.2`) — this may be a reportable breach
-4. **Identify the path** — how did production PHI reach the non-production environment?
-5. **Document and remediate** — update the risk register; implement controls to prevent recurrence
+2. **Isolate** the non-production environment: disable access until scope is determined
+3. **Apply the four-factor breach assessment** (`docs/09-breach-notification-procedure.md §1.2`): this may be a reportable breach
+4. **Identify the path**: how did production PHI reach the non-production environment?
+5. **Document and remediate**: update the risk register; implement controls to prevent recurrence
 
 The presence of real PHI in a non-production environment that lacks production-level safeguards (BAA, audit logging, access controls) is a serious compliance event.
 
@@ -166,7 +166,7 @@ The presence of real PHI in a non-production environment that lacks production-l
 
 ## Related Documents
 
-- `docs/08-risk-analysis-template.md` — Environment risks should be included in the risk analysis
-- `checklists/pre-launch-audit.md` — Environment separation must be verified before go-live
-- `checklists/gcp-configuration.md` — Project-level settings apply per environment
-- `docs/11-administrative-policies.md` §7 — Contingency plan covers production environment recovery
+- `docs/08-risk-analysis-template.md`: Environment risks should be included in the risk analysis
+- `checklists/pre-launch-audit.md`: Environment separation must be verified before go-live
+- `checklists/gcp-configuration.md`: Project-level settings apply per environment
+- `docs/11-administrative-policies.md` §7: Contingency plan covers production environment recovery

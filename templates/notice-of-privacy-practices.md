@@ -69,7 +69,7 @@ Records about your participation in a substance use disorder treatment program a
 What this means for you:
 
 - We **cannot share** your SUD treatment records without your **written consent**, except in very limited circumstances
-- We cannot tell anyone — including law enforcement, courts, or employers — that you are or were in a SUD program, unless you give us written permission or the law specifically requires it
+- We cannot tell anyone, including law enforcement, courts, or employers, that you are or were in a SUD program, unless you give us written permission or the law specifically requires it
 - Your SUD records **cannot be used to investigate or prosecute you** for a crime without a court order that meets very strict legal requirements
 
 Exceptions where we may share SUD records without your consent include:
@@ -139,7 +139,7 @@ Website: www.hhs.gov/ocr/privacy/hipaa/complaints
 
 We are committed to:
 - Following the terms described in this notice
-- Notifying you if we make changes to our privacy practices that affect how we use or share your health information — changes will apply to information we already have on file as well as information we receive in the future, and an updated notice will be posted at our facility and available upon request
+- Notifying you if we make changes to our privacy practices that affect how we use or share your health information. Changes will apply to information we already have on file as well as information we receive in the future. An updated notice will be posted at our facility and available upon request.
 - Letting you know promptly if your health information is accidentally or improperly accessed or shared
 
 ---
@@ -150,7 +150,7 @@ We may change this notice at any time. If we make a significant change, we will 
 
 ---
 
-[NOTE TO IMPLEMENTER: Ensure the Privacy Officer contact information is updated in both locations in this document — the block above (under "Right to File a Complaint") and the block below (under "Contact Us") must contain the same information.]
+[NOTE TO IMPLEMENTER: Ensure the Privacy Officer contact information is updated in both locations in this document; the block above (under "Right to File a Complaint") and the block below (under "Contact Us") must contain the same information.]
 
 ## Contact Us
 
@@ -181,5 +181,5 @@ By signing below, you confirm that you have received a copy of this Notice of Pr
 
 ---
 
-*[ORGANIZATION NAME] — Notice of Privacy Practices — Effective [MM/DD/YYYY]*
+*[ORGANIZATION NAME]: Notice of Privacy Practices, Effective [MM/DD/YYYY]*
 *This document may be revised. Contact our Privacy Officer for the most current version.*

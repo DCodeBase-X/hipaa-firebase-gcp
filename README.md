@@ -76,7 +76,7 @@ flowchart TD
 
 | Document | What It Covers |
 |---|---|
-| [HIPAA Fundamentals](docs/01-hipaa-fundamentals.md) | What HIPAA actually requires technically — no fluff |
+| [HIPAA Fundamentals](docs/01-hipaa-fundamentals.md) | What HIPAA actually requires technically: no fluff |
 | [Three-Layer Architecture](docs/02-three-layer-architecture.md) | Full architecture breakdown with diagrams |
 | [Firebase HIPAA Guide](docs/03-firebase-hipaa-guide.md) | What's covered under the BAA, what isn't, and the critical gotchas |
 | [Multi-Vendor Boundaries](docs/04-multi-vendor-boundaries.md) | Where compliance responsibility shifts across Hostinger, Firebase, Cloudflare, Salesforce |
@@ -146,12 +146,12 @@ If your app stores PHI and you're using Firebase Realtime Database (not Firestor
 
 If you're building from scratch, read in this order:
 
-1. [HIPAA Fundamentals](docs/01-hipaa-fundamentals.md) — understand what you're actually required to do
-2. [Three-Layer Architecture](docs/02-three-layer-architecture.md) — pick your pattern
-3. [Firebase HIPAA Guide](docs/03-firebase-hipaa-guide.md) — configure Firebase correctly
-4. [Multi-Vendor Boundaries](docs/04-multi-vendor-boundaries.md) — map your BAA coverage
-5. [RBAC Design](docs/05-rbac-design.md) — design your access control model
-6. [Pre-Launch Audit Checklist](checklists/pre-launch-audit.md) — verify before go-live
+1. [HIPAA Fundamentals](docs/01-hipaa-fundamentals.md): understand what you're actually required to do
+2. [Three-Layer Architecture](docs/02-three-layer-architecture.md): pick your pattern
+3. [Firebase HIPAA Guide](docs/03-firebase-hipaa-guide.md): configure Firebase correctly
+4. [Multi-Vendor Boundaries](docs/04-multi-vendor-boundaries.md): map your BAA coverage
+5. [RBAC Design](docs/05-rbac-design.md): design your access control model
+6. [Pre-Launch Audit Checklist](checklists/pre-launch-audit.md): verify before go-live
 
  
 
@@ -159,7 +159,7 @@ If you're building from scratch, read in this order:
 
 Built from a real implementation. This is a complete overview of the HIPAA-compliant 3-layer cloud infrastructure for a faith-based 501(c)(3) nonprofit handling PHI across 10 integrated service programs, designed to support 100–150 residents.
 
-**Damarius McNair** — Operations, Data, and Technology Strategist
+**Damarius McNair**, Operations, Data, and Technology Strategist
 
 - Portfolio: [damariusmcnair.com](https://damariusmcnair.com)
 - GitHub: [@DCodeBase-X](https://github.com/DCodeBase-X)

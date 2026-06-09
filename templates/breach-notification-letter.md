@@ -1,6 +1,6 @@
 # Breach Notification Letter Templates
 
-> **Reference**: 45 CFR § 164.404(c) — Content requirements for individual breach notifications
+> **Reference**: 45 CFR § 164.404(c) (content requirements for individual breach notifications)
 > **See also**: `docs/09-breach-notification-procedure.md` for the full notification procedure.
 
 ---
@@ -37,7 +37,7 @@ We are writing to inform you of a security incident that may have affected some 
 
 **What Happened**
 
-On [date of discovery], we discovered that [brief, plain-language description of what occurred — e.g., "an employee's email account was accessed by an unauthorized person," "a laptop was stolen from our office," "a system configuration error temporarily allowed unauthorized access to our records system"]. We immediately took steps to stop the incident and launched an investigation.
+On [date of discovery], we discovered that [brief, plain-language description of what occurred, e.g., "an employee's email account was accessed by an unauthorized person," "a laptop was stolen from our office," "a system configuration error temporarily allowed unauthorized access to our records system"]. We immediately took steps to stop the incident and launched an investigation.
 
 Our investigation determined that the incident occurred on or around [estimated date of breach or date range], and that it may have involved your information.
 
@@ -84,7 +84,7 @@ Because your Social Security Number was involved, we recommend you visit Identit
 
 If you have questions about this notice or would like more information about what happened, please contact us:
 
-[Organization Name] — HIPAA Privacy Office
+[Organization Name], HIPAA Privacy Office
 Phone: [toll-free number], available [hours, days]
 Email: [privacy@organization.org]
 Mailing address: [full address]
@@ -95,13 +95,13 @@ Sincerely,
 
 _______________________________________________
 [Name]
-[Title — e.g., Executive Director / Privacy Officer]
+[Title, e.g., Executive Director / Privacy Officer]
 [Organization Name]
 [Date]
 
 ---
 
-## Template 2: Brief Substitute Notice (Website Posting — ≥ 10 Individuals with Insufficient Contact Info)
+## Template 2: Brief Substitute Notice (Website Posting: ≥ 10 Individuals with Insufficient Contact Info)
 
 Post prominently on the organization's homepage for a minimum of 90 days.
 
@@ -138,7 +138,7 @@ Date: [Date]
 
 **[ORGANIZATION NAME] NOTIFIES CLIENTS OF DATA SECURITY INCIDENT**
 
-[City, State] — [Organization Name], a [type of organization] serving [description of client population], today announced a data security incident that may have affected the personal health information of approximately [number] clients.
+[City, State]: [Organization Name], a [type of organization] serving [description of client population], today announced a data security incident that may have affected the personal health information of approximately [number] clients.
 
 On [discovery date], [Organization Name] discovered that [plain-language description of incident]. Upon discovery, the organization immediately [containment actions]. An investigation was promptly launched.
 
@@ -190,6 +190,6 @@ For breaches affecting fewer than 500 individuals, maintain a log and submit ann
 
 ## Related Documents
 
-- `docs/09-breach-notification-procedure.md` — Full breach notification procedure
-- `checklists/incident-response-runbook.md` — Operational response steps
-- `docs/11-administrative-policies.md` — Roles and responsibilities
+- `docs/09-breach-notification-procedure.md`: Full breach notification procedure
+- `checklists/incident-response-runbook.md`: Operational response steps
+- `docs/11-administrative-policies.md`: Roles and responsibilities

@@ -36,7 +36,7 @@ flowchart TD
 ## Role-to-Data Access Matrix
 
 | Data Type | admin | clinical_staff | program_staff | volunteer | client |
-| |:---:|:---:|:---:|:---:|:---:|
+| --- | :---: | :---: | :---: | :---: | :---: |
 | Client PHI (health, assessments) | ✅ All | ✅ Assigned only | ❌ | ❌ | ✅ Own only |
 | Client demographics | ✅ All | ✅ Assigned only | ✅ Limited | ❌ | ✅ Own only |
 | Program enrollment status | ✅ | ✅ | ✅ Assigned programs only | ❌ | ✅ Own only |

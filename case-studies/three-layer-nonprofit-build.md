@@ -248,4 +248,4 @@ Not the technology. The harder challenge is organizational change management. Ge
 
 *This case study is based on a real implementation. Organization details are generalized for privacy.*
 
-*Built by **Damarius McNair**, [Portfolio](https://dcodebase-x.github.io) · [GitHub](https://github.com/DCodeBase-X)*
+*Built by **Damarius McNair**, [Portfolio](https://damariusmcnair.com) :: [GitHub](https://github.com/DCodeBase-X)*
